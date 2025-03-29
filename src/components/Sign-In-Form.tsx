@@ -4,7 +4,6 @@ import {
 } from "../type/user/signin-zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import logo from "../assets/Barangay logo.png";
 import authHook from "../hooks/authHook";
 export const SignInForm = () => {
   const {
@@ -24,8 +23,8 @@ export const SignInForm = () => {
     <div className="px-3 flex items-center justify-center flex-col">
       <div className="w-[70%] ">
         <div>
-          <div>
-            <img src={logo} />
+          <div className="w-[100px] h-[100px] rounded-full">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRigtgVaWpL82AnhiwTQpt4SI1vV5GTEc-VzA&s" />
           </div>
           <div className="mt-2">
             <h1 className="text-3xl text-[#525252] font-semibold">
