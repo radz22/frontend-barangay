@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import CencusHook from "../../hooks/staff/cencus-hook";
 import { useEffect } from "react";
 const CencusDataUserContent = () => {
-  const { id } = useParams<{ id: string | undefined }>();
+  const { id } = useParams();
 
   const { cencusDataUser, handleGetUserCencusDataById } = CencusHook();
 

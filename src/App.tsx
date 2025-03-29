@@ -39,7 +39,7 @@ const StaffCencus = lazy(() =>
     default: module.Cencus,
   }))
 );
-const StaffCencusData = lazy(() =>
+const CencusDataUser = lazy(() =>
   import("./pages/staff/CencusDataUser").then((module) => ({
     default: module.default,
   }))
@@ -68,7 +68,7 @@ function App() {
         <Routes>
           {/* ✅ Public Routes */}
           <Route path="/" element={<Signin />} />
-          <Route path="/page/staff/:id" element={<StaffCencusData />} />
+          <Route path="/page/user/detail/:id" element={<CencusDataUser />} />
           <Route path="/page/reset-password/:id" element={<ResetPassword />} />
           <Route path="/page/unauthorized" element={<Unauthorized />} />
 
