@@ -14,7 +14,7 @@ const CencusDataModal: React.FC<CencusDataModalProps> = ({ userData }) => {
       </div>
     );
   }
-  const url = `http://localhost:5173/page/staff/${userData._id}`;
+  const url = `https://barangay-ly7m.onrender.com/page/staff/${userData._id}`;
 
   return (
     <div className="mt-4 space-y-6">
