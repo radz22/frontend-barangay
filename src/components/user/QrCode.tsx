@@ -3,7 +3,7 @@ import CencusHook from "../../hooks/staff/cencus-hook";
 const QrCode = () => {
   const { cencusUserData } = CencusHook();
 
-  const url = `http://localhost:5173/page/staff/${cencusUserData?.data?._id}`;
+  const url = `https://barangay-ly7m.onrender.com/page/user/detail/${cencusUserData?.data?._id}`;
 
   return (
     <div className="w-full flex items-center justify-center">
