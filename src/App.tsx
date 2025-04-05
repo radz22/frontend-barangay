@@ -65,7 +65,11 @@ const Unauthorized = lazy(() =>
     default: module.default,
   }))
 );
-
+const FaceDetection = lazy(() =>
+  import("./pages/face-detection").then((module) => ({
+    default: module.default,
+  }))
+);
 function App() {
   return (
     <Router>
@@ -76,6 +80,7 @@ function App() {
           <Route path="/page/user/detail/:id" element={<CencusDataUser />} />
           <Route path="/page/reset-password/:id" element={<ResetPassword />} />
           <Route path="/page/unauthorized" element={<Unauthorized />} />
+          <Route path="/page/face" element={<FaceDetection />} />
 
           <Route element={<ProtectedRoute allowedRoles={["admin", "staff"]} />}>
             <Route path="/page/staff" element={<StaffCencus />} />
