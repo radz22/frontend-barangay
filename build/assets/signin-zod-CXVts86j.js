@@ -1,0 +1,1 @@
+import{z as i}from"./zod-Bu1ipLjt.js";const n=i.object({email:i.string().min(1,"Email is required").email(),password:i.string().min(6,"Password is contain 6 characters"),role:i.enum(["admin","user","staff"]).optional()});export{n as s};

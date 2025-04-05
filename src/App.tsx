@@ -19,6 +19,11 @@ const AdminLayout = lazy(() =>
     default: module.AdminLayout,
   }))
 );
+const AdminArchived = lazy(() =>
+  import("./pages/admin/Archived").then((module) => ({
+    default: module.default,
+  }))
+);
 const AdminResident = lazy(() =>
   import("./pages/admin/Resident").then((module) => ({
     default: module.Resident,
@@ -83,6 +88,7 @@ function App() {
               <Route path="/admin/residents" element={<AdminResident />} />
               <Route path="/admin/census" element={<AdminCencus />} />
               <Route path="/admin/settings" element={<AdminSettings />} />
+              <Route path="/admin/archived" element={<AdminArchived />} />
               <Route
                 path="/admin/staff/account"
                 element={<CreateStaffAccount />}

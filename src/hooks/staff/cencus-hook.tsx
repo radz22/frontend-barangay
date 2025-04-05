@@ -7,6 +7,8 @@ import {
   getUserCencusData,
   getUserCencusDataById,
   deleteById,
+  deleteArchiveCencusbyId,
+  restoredCencusbyId,
 } from "../../services/staff/cencus-services";
 import useCookie from "../cookie-hook";
 
@@ -48,7 +50,7 @@ const CencusHook = () => {
   const deleteCencusDataByIdMutation = useMutation({
     mutationFn: deleteById,
     onSuccess: () => {
-      handleSuccessAlert("Deleted Succesfuly ");
+      handleSuccessAlert("Permanently Deleted Succesfuly ");
       queryClient.invalidateQueries({ queryKey: ["cencus"] });
     },
     onError: (error: any) => {
@@ -65,15 +67,41 @@ const CencusHook = () => {
       handleErrorAlert(error.response.data.error);
     },
   });
-
+  const restoredCencusbyIdMutation = useMutation({
+    mutationFn: restoredCencusbyId,
+    onSuccess: () => {
+      handleSuccessAlert("Restored Succesfuly ");
+      queryClient.invalidateQueries({ queryKey: ["cencus"] });
+    },
+    onError: (error: any) => {
+      handleErrorAlert(error.response.data.error);
+    },
+  });
+  const deleteArchiveCencusbyIdMutation = useMutation({
+    mutationFn: deleteArchiveCencusbyId,
+    onSuccess: () => {
+      handleSuccessAlert("Deleted Succesfuly ");
+      queryClient.invalidateQueries({ queryKey: ["cencus"] });
+    },
+    onError: (error: any) => {
+      handleErrorAlert(error.response.data.error);
+    },
+  });
   const handleCreateCencus = (data: cencusType) => {
     createCencusMutation.mutate(data);
   };
   const handleGetUserCencusDataById = (id: string | undefined) => {
     getCencusDataByIdMutation.mutate(id);
   };
-  const handleDelete = (id: string | null) => {
+  const handleDelete = (id: string | null | undefined) => {
     deleteCencusDataByIdMutation.mutate(id);
+  };
+
+  const handleArchievedDelete = (id: string | null) => {
+    deleteArchiveCencusbyIdMutation.mutate(id);
+  };
+  const handleRestore = (id: string | null | undefined) => {
+    restoredCencusbyIdMutation.mutate(id);
   };
   return {
     handleCreateCencus,
@@ -86,6 +114,10 @@ const CencusHook = () => {
     cencusDataUser,
     handleDelete,
     deleteCencusDataByIdMutation,
+    handleArchievedDelete,
+    deleteArchiveCencusbyIdMutation,
+    handleRestore,
+    restoredCencusbyIdMutation,
   };
 };
 

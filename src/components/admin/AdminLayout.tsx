@@ -8,6 +8,7 @@ import {
   FiLogOut,
 } from "react-icons/fi";
 import { RiAccountPinBoxFill } from "react-icons/ri";
+import { RiArchiveDrawerLine } from "react-icons/ri";
 
 export const AdminLayout = () => {
   const { handleLogout } = authHook();
@@ -22,6 +23,7 @@ export const AdminLayout = () => {
           {[
             { to: "/admin/dashboard", label: "Dashboard", icon: <FiHome /> },
             { to: "/admin/residents", label: "Residents", icon: <FiUsers /> },
+
             {
               to: "/admin/census",
               label: "Census Data",
@@ -31,6 +33,11 @@ export const AdminLayout = () => {
               to: "/admin/staff/account",
               label: "Staff Account",
               icon: <RiAccountPinBoxFill />,
+            },
+            {
+              to: "/admin/archived",
+              label: "Archived",
+              icon: <RiArchiveDrawerLine />,
             },
             { to: "/admin/settings", label: "Settings", icon: <FiSettings /> },
           ].map(({ to, label, icon }) => (
