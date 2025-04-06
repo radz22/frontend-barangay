@@ -148,7 +148,7 @@ export const CencusContentForm = () => {
     if (streaming) setTimeout(() => detectFaceLoop(), 300);
   };
 
-  const onSubmit: SubmitHandler<cencusType> = async (data) => {
+  const onSubmit: SubmitHandler<cencusType> = async () => {
     if (!videoRef.current) return;
 
     try {
@@ -179,7 +179,7 @@ export const CencusContentForm = () => {
       // Submit the form data
       setValue("descriptor", descriptor, { shouldValidate: true });
       const updatedData = getValues();
-      // await handleCreateCencus(updatedData);
+      await handleCreateCencus(updatedData);
       console.log(updatedData);
       stopCamera();
     } catch (error) {

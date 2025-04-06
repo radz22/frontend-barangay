@@ -1,4 +1,4 @@
-var Co=Object.defineProperty;var Oo=(i,t,e)=>t in i?Co(i,t,{enumerable:!0,configurable:!0,writable:!0,value:e}):i[t]=e;var M=(i,t,e)=>Oo(i,typeof t!="symbol"?t+"":t,e);import{r as ct,R as Pn,j as $}from"./index-CaaIHyZZ.js";import{C as Do}from"./cencus-hook-DUuy472I.js";import{R as Ao}from"./resident-hook-B7_qbcRv.js";import"./sweet-alert-DN3J5jfH.js";/*!
+var Co=Object.defineProperty;var Oo=(i,t,e)=>t in i?Co(i,t,{enumerable:!0,configurable:!0,writable:!0,value:e}):i[t]=e;var M=(i,t,e)=>Oo(i,typeof t!="symbol"?t+"":t,e);import{r as ct,R as Pn,j as $}from"./index-DZNekYFt.js";import{C as Do}from"./cencus-hook-BPi_aC9_.js";import{R as Ao}from"./resident-hook-DEZuxZrY.js";import"./sweet-alert-Dun-8MXZ.js";/*!
  * @kurkle/color v0.3.4
  * https://github.com/kurkle/color#readme
  * (c) 2024 Jukka Kurkela
