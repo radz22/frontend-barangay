@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { cencusSchema, cencusType } from "../../type/user/cencus-zod";
 import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,16 +6,27 @@ import { calculateAge } from "../../utils/calculateAge";
 import CencusHook from "../../hooks/staff/cencus-hook";
 import authHook from "../../hooks/authHook";
 import { useState } from "react";
+import * as faceapi from "face-api.js";
+
 export const CencusContentForm = () => {
   const { handleCreateCencus, createCencusMutation } = CencusHook();
   const { handleLogout } = authHook();
-  const [show, setShow] = useState<boolean>(false);
+
+  // Refs and state
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [show, setShow] = useState(false);
+  const [streaming, setStreaming] = useState(false);
+  const [angleMessage, setAngleMessage] = useState("");
+
+  // Form setup
   const {
     register,
     control,
     handleSubmit,
     setValue,
     watch,
+    getValues,
     formState: { errors },
   } = useForm<cencusType>({
     resolver: zodResolver(cencusSchema),
@@ -23,23 +34,28 @@ export const CencusContentForm = () => {
       householdMembers: [],
     },
   });
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "householdMembers",
   });
+
+  // Watched values
   const selectedDate = watch("birthday");
   const disAbilityStatus = watch("disabilitystatus");
   const residentLived = watch("residentlived");
   const dateofcencus = watch("dateofcencus");
   const areaofcencusstreet = watch("areaofcencusstreet");
+  const householdMembers = watch("householdMembers");
 
+  // Effects
   useEffect(() => {
     if (selectedDate) {
       const age = calculateAge(selectedDate);
       setValue("age", age, { shouldValidate: true });
     }
   }, [selectedDate, setValue]);
-  const householdMembers = watch("householdMembers");
+
   useEffect(() => {
     if (householdMembers) {
       householdMembers.forEach((member, index) => {
@@ -52,14 +68,125 @@ export const CencusContentForm = () => {
       });
     }
   }, [JSON.stringify(householdMembers), setValue]);
-  const onSubmit: SubmitHandler<cencusType> = (data) => {
-    console.log(data);
-    handleCreateCencus(data);
-  };
 
+  useEffect(() => {
+    loadModels();
+  }, []);
+
+  // Helper functions
   const handleCheck = () => {
     if (dateofcencus && areaofcencusstreet) {
       setShow(true);
+    }
+  };
+
+  const loadModels = async () => {
+    const MODEL_URL = "/models";
+    await Promise.all([
+      faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+      faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+      faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
+    ]);
+  };
+
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        setStreaming(true);
+      }
+      setTimeout(() => detectFaceLoop(), 1000);
+    } catch (error) {
+      console.error("Error accessing camera:", error);
+      alert("Could not access camera. Please check permissions.");
+    }
+  };
+
+  const stopCamera = () => {
+    if (videoRef.current?.srcObject) {
+      const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
+      tracks.forEach((track) => track.stop());
+    }
+    setStreaming(false);
+    canvasRef.current?.getContext("2d")?.clearRect(0, 0, 640, 480);
+  };
+
+  const detectFaceLoop = async () => {
+    if (!videoRef.current || !canvasRef.current) return;
+    const video = videoRef.current;
+
+    try {
+      const result = await faceapi
+        .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+
+      const canvas = canvasRef.current;
+      const displaySize = { width: video.width, height: video.height };
+      faceapi.matchDimensions(canvas, displaySize);
+      canvas.getContext("2d")?.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (result) {
+        const resizedResult = faceapi.resizeResults(result, displaySize);
+        faceapi.draw.drawDetections(canvas, resizedResult);
+        faceapi.draw.drawFaceLandmarks(canvas, resizedResult);
+
+        const leftEye = resizedResult.landmarks.getLeftEye();
+        const rightEye = resizedResult.landmarks.getRightEye();
+        const eyeDistance = Math.abs(leftEye[0].x - rightEye[3].x);
+
+        setAngleMessage(
+          eyeDistance >= 40 ? "✅ Angle OK" : "❌ Face the camera directly."
+        );
+      } else {
+        setAngleMessage("❌ No face detected.");
+      }
+    } catch (error) {
+      console.error("Face detection error:", error);
+      setAngleMessage("❌ Error detecting face");
+    }
+
+    if (streaming) setTimeout(() => detectFaceLoop(), 300);
+  };
+
+  const onSubmit: SubmitHandler<cencusType> = async (data) => {
+    if (!videoRef.current) return;
+
+    try {
+      const detection = await faceapi
+        .detectSingleFace(
+          videoRef.current,
+          new faceapi.TinyFaceDetectorOptions()
+        )
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+
+      if (!detection) {
+        alert("No face detected.");
+        return;
+      }
+
+      const leftEye = detection.landmarks.getLeftEye();
+      const rightEye = detection.landmarks.getRightEye();
+      const eyeDistance = Math.abs(leftEye[0].x - rightEye[3].x);
+
+      if (eyeDistance < 40) {
+        alert("Face the camera directly.");
+        return;
+      }
+
+      const descriptor = Array.from(detection.descriptor as Float32Array);
+      setValue("descriptor", descriptor, { shouldValidate: true });
+
+      // Submit the form data
+      setValue("descriptor", descriptor, { shouldValidate: true });
+      const updatedData = getValues();
+      await handleCreateCencus(updatedData);
+      stopCamera();
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("Error submitting form. Please try again.");
     }
   };
 
@@ -1163,6 +1290,48 @@ export const CencusContentForm = () => {
                 Add Household Member
               </button>
             </div>
+            <h2 className="text-2xl font-bold text-center">
+              Register New Face
+            </h2>
+
+            <div className="flex justify-center gap-4">
+              {!streaming ? (
+                <button
+                  onClick={startCamera}
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                >
+                  Open Camera
+                </button>
+              ) : (
+                <button
+                  onClick={stopCamera}
+                  className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+                >
+                  Close Camera
+                </button>
+              )}
+            </div>
+
+            <div className="relative w-full max-w-xl mx-auto aspect-video border rounded overflow-hidden">
+              <video
+                ref={videoRef}
+                width="640"
+                height="480"
+                autoPlay
+                muted
+                className="absolute top-0 left-0 w-full h-full object-cover"
+              />
+              <canvas
+                ref={canvasRef}
+                width="640"
+                height="480"
+                className="absolute top-0 left-0 w-full h-full"
+              />
+            </div>
+
+            <p className="text-center font-medium text-gray-700">
+              {angleMessage}
+            </p>
 
             <button
               type="submit"

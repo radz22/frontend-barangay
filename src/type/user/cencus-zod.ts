@@ -186,6 +186,7 @@ export const cencusSchema = z
       )
       .optional(),
     archived: z.boolean().default(false).optional(),
+    descriptor: z.array(z.number()).optional(),
   })
   .superRefine((data, ctx) => {
     if (data.residentlived === "yes") {
