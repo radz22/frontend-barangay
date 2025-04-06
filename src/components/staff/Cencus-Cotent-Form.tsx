@@ -89,18 +89,18 @@ export const CencusContentForm = () => {
     ]);
   };
 
+  useEffect(() => {
+    loadModels();
+  }, []);
+
   const startCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        setStreaming(true);
-      }
-      setTimeout(() => detectFaceLoop(), 1000);
-    } catch (error) {
-      console.error("Error accessing camera:", error);
-      alert("Could not access camera. Please check permissions.");
+    const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+    if (videoRef.current) {
+      videoRef.current.srcObject = stream;
+      setStreaming(true);
+      setAngleMessage("Open Camera");
     }
+    setTimeout(() => detectFaceLoop(), 1000);
   };
 
   const stopCamera = () => {
@@ -109,6 +109,7 @@ export const CencusContentForm = () => {
       tracks.forEach((track) => track.stop());
     }
     setStreaming(false);
+    setAngleMessage("Close Camera");
     canvasRef.current?.getContext("2d")?.clearRect(0, 0, 640, 480);
   };
 
@@ -116,35 +117,32 @@ export const CencusContentForm = () => {
     if (!videoRef.current || !canvasRef.current) return;
     const video = videoRef.current;
 
-    try {
-      const result = await faceapi
-        .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
-        .withFaceLandmarks()
-        .withFaceDescriptor();
+    const result = await faceapi
+      .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
+      .withFaceLandmarks()
+      .withFaceDescriptor();
 
-      const canvas = canvasRef.current;
-      const displaySize = { width: video.width, height: video.height };
-      faceapi.matchDimensions(canvas, displaySize);
-      canvas.getContext("2d")?.clearRect(0, 0, canvas.width, canvas.height);
+    const canvas = canvasRef.current;
+    const displaySize = { width: video.width, height: video.height };
+    faceapi.matchDimensions(canvas, displaySize);
+    canvas.getContext("2d")?.clearRect(0, 0, canvas.width, canvas.height);
 
-      if (result) {
-        const resizedResult = faceapi.resizeResults(result, displaySize);
-        faceapi.draw.drawDetections(canvas, resizedResult);
-        faceapi.draw.drawFaceLandmarks(canvas, resizedResult);
+    if (result) {
+      const resizedResult = faceapi.resizeResults(result, displaySize);
+      faceapi.draw.drawDetections(canvas, resizedResult);
+      faceapi.draw.drawFaceLandmarks(canvas, resizedResult);
 
-        const leftEye = resizedResult.landmarks.getLeftEye();
-        const rightEye = resizedResult.landmarks.getRightEye();
-        const eyeDistance = Math.abs(leftEye[0].x - rightEye[3].x);
+      const leftEye = resizedResult.landmarks.getLeftEye();
+      const rightEye = resizedResult.landmarks.getRightEye();
+      const eyeDistance = Math.abs(leftEye[0].x - rightEye[3].x);
 
-        setAngleMessage(
-          eyeDistance >= 40 ? "✅ Angle OK" : "❌ Face the camera directly."
-        );
+      if (eyeDistance >= 40) {
+        setAngleMessage("✅ Angle OK");
       } else {
-        setAngleMessage("❌ No face detected.");
+        setAngleMessage("❌ Face the camera directly.");
       }
-    } catch (error) {
-      console.error("Face detection error:", error);
-      setAngleMessage("❌ Error detecting face");
+    } else {
+      setAngleMessage("❌ No face detected.");
     }
 
     if (streaming) setTimeout(() => detectFaceLoop(), 300);
@@ -163,7 +161,6 @@ export const CencusContentForm = () => {
         .withFaceDescriptor();
 
       if (!detection) {
-        alert("No face detected.");
         return;
       }
 
@@ -182,7 +179,8 @@ export const CencusContentForm = () => {
       // Submit the form data
       setValue("descriptor", descriptor, { shouldValidate: true });
       const updatedData = getValues();
-      await handleCreateCencus(updatedData);
+      // await handleCreateCencus(updatedData);
+      console.log(updatedData);
       stopCamera();
     } catch (error) {
       console.error("Submission error:", error);
@@ -1332,7 +1330,6 @@ export const CencusContentForm = () => {
             <p className="text-center font-medium text-gray-700">
               {angleMessage}
             </p>
-
             <button
               type="submit"
               className="w-full bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
