@@ -7,18 +7,17 @@ import CencusHook from "../../hooks/staff/cencus-hook";
 import authHook from "../../hooks/authHook";
 import { useState } from "react";
 import * as faceapi from "face-api.js";
-
+import GetCookie from "../../hooks/get-cookie";
 export const CencusContentForm = () => {
   const { handleCreateCencus, createCencusMutation } = CencusHook();
   const { handleLogout } = authHook();
-
   // Refs and state
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [show, setShow] = useState(false);
   const [streaming, setStreaming] = useState(false);
   const [angleMessage, setAngleMessage] = useState("");
-
+  const { cookieEmail } = GetCookie();
   // Form setup
   const {
     register,
@@ -48,7 +47,6 @@ export const CencusContentForm = () => {
   const areaofcencusstreet = watch("areaofcencusstreet");
   const householdMembers = watch("householdMembers");
 
-  // Effects
   useEffect(() => {
     if (selectedDate) {
       const age = calculateAge(selectedDate);
@@ -174,10 +172,10 @@ export const CencusContentForm = () => {
       }
 
       const descriptor = Array.from(detection.descriptor as Float32Array);
-      setValue("descriptor", descriptor, { shouldValidate: true });
 
       // Submit the form data
       setValue("descriptor", descriptor, { shouldValidate: true });
+      setValue("staffaccountcreate", cookieEmail, { shouldValidate: true });
       const updatedData = getValues();
       await handleCreateCencus(updatedData);
       console.log(updatedData);

@@ -3,6 +3,7 @@ import { DataType } from "./cencus-residentlive-type";
 export const cencusSchema = z
   .object({
     _id: z.string().optional(),
+    staffaccountcreate: z.string().optional(),
     dateofcencus: z.string(),
     areaofcencusstreet: z.string(),
     firstname: z.string().min(1, "First Name is Required"),
