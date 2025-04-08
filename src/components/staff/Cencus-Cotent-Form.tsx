@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { cencusSchema, cencusType } from "../../type/user/cencus-zod";
 import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,8 +7,16 @@ import CencusHook from "../../hooks/staff/cencus-hook";
 import authHook from "../../hooks/authHook";
 import { useState } from "react";
 import * as faceapi from "face-api.js";
-import GetCookie from "../../hooks/get-cookie";
-export const CencusContentForm = () => {
+
+interface CencusProps {
+  setType: (type: "resident" | "cencus") => void;
+  cookieEmail: string | undefined;
+}
+
+export const CencusContentForm: React.FC<CencusProps> = ({
+  setType,
+  cookieEmail,
+}) => {
   const { handleCreateCencus, createCencusMutation } = CencusHook();
   const { handleLogout } = authHook();
   // Refs and state
@@ -17,7 +25,6 @@ export const CencusContentForm = () => {
   const [show, setShow] = useState(false);
   const [streaming, setStreaming] = useState(false);
   const [angleMessage, setAngleMessage] = useState("");
-  const { cookieEmail } = GetCookie();
   // Form setup
   const {
     register,
@@ -67,11 +74,6 @@ export const CencusContentForm = () => {
     }
   }, [JSON.stringify(householdMembers), setValue]);
 
-  useEffect(() => {
-    loadModels();
-  }, []);
-
-  // Helper functions
   const handleCheck = () => {
     if (dateofcencus && areaofcencusstreet) {
       setShow(true);
@@ -92,7 +94,7 @@ export const CencusContentForm = () => {
   }, []);
 
   const startCamera = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     if (videoRef.current) {
       videoRef.current.srcObject = stream;
       setStreaming(true);
@@ -105,16 +107,27 @@ export const CencusContentForm = () => {
     if (videoRef.current?.srcObject) {
       const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
       tracks.forEach((track) => track.stop());
+      videoRef.current.srcObject = null; // clear the video feed
     }
+
     setStreaming(false);
     setAngleMessage("Close Camera");
-    canvasRef.current?.getContext("2d")?.clearRect(0, 0, 640, 480);
+
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        // Fill canvas with black or white screen
+        ctx.fillStyle = "#000"; // change to "#fff" for white
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+    }
   };
 
   const detectFaceLoop = async () => {
     if (!videoRef.current || !canvasRef.current) return;
-    const video = videoRef.current;
 
+    const video = videoRef.current;
     const result = await faceapi
       .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks()
@@ -145,7 +158,6 @@ export const CencusContentForm = () => {
 
     if (streaming) setTimeout(() => detectFaceLoop(), 300);
   };
-
   const onSubmit: SubmitHandler<cencusType> = async () => {
     if (!videoRef.current) return;
 
@@ -1315,7 +1327,7 @@ export const CencusContentForm = () => {
                 height="480"
                 autoPlay
                 muted
-                className="absolute top-0 left-0 w-full h-full object-cover"
+                className="absolute top-0 left-0 w-full h-full object-cover bg-black"
               />
               <canvas
                 ref={canvasRef}
@@ -1338,10 +1350,23 @@ export const CencusContentForm = () => {
           </form>
         )}
       </div>
-      <div className="absolute top-0 right-5" onClick={handleLogout}>
-        <button className="px-3 py-3 bg-[#7F265B] rounded-lg flex items-center justify-center  cursor-pointe text-white font-semibold">
-          Log out
-        </button>
+      <div className="absolute top-0 right-5">
+        <div className="w-full flex items-center justify-center">
+          <button
+            className="px-3 py-3 bg-[#7F265B] rounded-lg   cursor-pointe text-white font-semibold"
+            onClick={handleLogout}
+          >
+            Log out
+          </button>
+        </div>
+        <div className="w-full flex items-center justify-center mt-5">
+          <h1
+            className="px-3 py-3 bg-[#7F265B] rounded-lg cursor-pointe text-white font-semibold"
+            onClick={() => setType("resident")}
+          >
+            Register Resident Face
+          </h1>
+        </div>
       </div>
     </div>
   );

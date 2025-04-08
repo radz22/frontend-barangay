@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const residentSchema = z.object({
   _id: z.string().optional(),
+  cencusid: z.string().min(1, "Census ID is required").optional(),
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   middlename: z.string().optional(),
@@ -22,6 +23,8 @@ export const residentSchema = z.object({
   address: z.string().min(1, "Address is required"),
   streetname: z.string().min(1, "Street name is required"),
   province: z.string().min(1, "Province is required"),
+  descriptor: z.array(z.number()).optional(),
+  staffaccountcreate: z.string().optional(),
 });
 
 export type residentType = z.infer<typeof residentSchema>;

@@ -70,6 +70,7 @@ const FaceDetection = lazy(() =>
     default: module.default,
   }))
 );
+
 function App() {
   return (
     <Router>
