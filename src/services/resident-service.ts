@@ -42,3 +42,20 @@ export const deleteById = async (id: string | null) => {
     throw error;
   }
 };
+export const registerFace = async ({
+  id,
+  descriptor,
+}: {
+  id: string;
+  descriptor: number[];
+}) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:3000/api/resident/${id}`,
+      { descriptor }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

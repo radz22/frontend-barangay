@@ -1,5 +1,8 @@
 import ResidentHook from "../../hooks/resident-hook";
 import { residentType } from "../../type/user/resident-profilling-zod";
+import * as Dialog from "@radix-ui/react-dialog";
+import { useState } from "react";
+import RegisterResidentFaceModal from "./register-resident-face-modal";
 
 interface RegisterResidentProps {
   setType: (type: "resident" | "cencus") => void;
@@ -10,7 +13,8 @@ const RegisterResidentFaceComponent: React.FC<RegisterResidentProps> = ({
   setType,
   cookieEmail,
 }) => {
-  const { residentData } = ResidentHook();
+  const { residentData, isLoading } = ResidentHook();
+  const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
 
   const sortedResident = [...(residentData?.data || [])].sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -63,104 +67,148 @@ const RegisterResidentFaceComponent: React.FC<RegisterResidentProps> = ({
         </div>
 
         {/* Card Body */}
-        <div className="p-6">
-          {sortedUnregisteredResidents.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="mx-auto w-24 h-24 flex items-center justify-center bg-green-50 rounded-full mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-12 w-12 text-green-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-lg font-medium text-gray-800 mb-1">
-                All residents are registered!
-              </h3>
-              <p className="text-gray-500">
-                No pending facial registrations found.
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {sortedUnregisteredResidents.map((resident: residentType) => (
-                <div
-                  key={resident._id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-150"
-                >
-                  <div className="flex items-center space-x-4 mb-3 sm:mb-0">
-                    <div className="flex-shrink-0">
-                      <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-medium">
-                        {resident.firstName.charAt(0)}
-                        {resident.lastName.charAt(0)}
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-gray-800">
-                        {resident.firstName} {resident.middlename}{" "}
-                        {resident.lastName}
-                      </h4>
-                      <div className="flex items-center mt-1">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
-                          <svg
-                            className="mr-1.5 h-2 w-2 text-red-400"
-                            fill="currentColor"
-                            viewBox="0 0 8 8"
-                          >
-                            <circle cx={4} cy={4} r={3} />
-                          </svg>
-                          Unregistered
-                        </span>
-                      </div>
-                    </div>
-                  </div>
 
-                  <div className="flex space-x-2">
-                    <button className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="mr-2 h-4 w-4"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M9 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4zm8-1a1 1 0 0 1 1-1h1v-1a1 1 0 1 1 2 0v1h1a1 1 0 1 1 0 2h-1v1a1 1 0 1 1-2 0v-1h-1a1 1 0 0 1-1-1z" />
-                      </svg>
-                      Register Face
-                    </button>
-                    <button className="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="mr-2 h-4 w-4"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="m11.52 14.929 5.917-5.917a8.2 8.2 0 0 1-2.661-1.787 8.2 8.2 0 0 1-1.788-2.662L7.07 10.48c-.462.462-.693.692-.891.947a5.2 5.2 0 0 0-.599.969c-.139.291-.242.601-.449 1.22l-1.088 3.267a.848.848 0 0 0 1.073 1.073l3.266-1.088c.62-.207.93-.31 1.221-.45q.518-.246.969-.598c.255-.199.485-.43.947-.891" />
-                        <path d="M3.25 22a.75.75 0 0 1 .75-.75h16a.75.75 0 0 1 0 1.5H4a.75.75 0 0 1-.75-.75" />
-                      </svg>
-                      Edit
-                    </button>
-                  </div>
+        {isLoading ? (
+          <div className="max-w-4xl mx-auto p-6 text-center">
+            <div className="animate-spin inline-block w-10 h-10 border-4 border-indigo-300 border-t-transparent rounded-full" />
+            <p className="mt-4 text-gray-600 text-sm">
+              Loading unregistered residents...
+            </p>
+          </div>
+        ) : (
+          <div className="p-6">
+            {sortedUnregisteredResidents.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="mx-auto w-24 h-24 flex items-center justify-center bg-green-50 rounded-full mb-4">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-12 w-12 text-green-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+                <h3 className="text-lg font-medium text-gray-800 mb-1">
+                  All residents are registered!
+                </h3>
+                <p className="text-gray-500">
+                  No pending facial registrations found.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {sortedUnregisteredResidents.map((resident: residentType) => (
+                  <div
+                    key={resident._id}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-150"
+                  >
+                    {/* Resident Info */}
+                    <div className="flex items-center space-x-4 mb-3 sm:mb-0">
+                      <div className="flex-shrink-0">
+                        <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-medium">
+                          {resident.firstName.charAt(0)}
+                          {resident.lastName.charAt(0)}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-gray-800">
+                          {resident.firstName} {resident.middlename}{" "}
+                          {resident.lastName}
+                        </h4>
+                        <div className="flex items-center mt-1">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
+                            <svg
+                              className="mr-1.5 h-2 w-2 text-red-400"
+                              fill="currentColor"
+                              viewBox="0 0 8 8"
+                            >
+                              <circle cx={4} cy={4} r={3} />
+                            </svg>
+                            Unregistered
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex space-x-2">
+                      <Dialog.Root>
+                        <Dialog.Trigger>
+                          <button
+                            className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            onClick={() => setSelectedId(resident._id)}
+                          >
+                            {/* Icon */}
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="mr-2 h-4 w-4"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M9 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4zm8-1a1 1 0 0 1 1-1h1v-1a1 1 0 1 1 2 0v1h1a1 1 0 1 1 0 2h-1v1a1 1 0 1 1-2 0v-1h-1a1 1 0 0 1-1-1z" />
+                            </svg>
+                            Register Face
+                          </button>
+                        </Dialog.Trigger>
+
+                        <Dialog.Portal>
+                          <Dialog.Overlay className="fixed inset-0 bg-black/50" />
+                          <Dialog.Content className="fixed top-1/2 left-1/2 bg-white p-6 rounded-lg shadow-lg transform -translate-x-1/2 -translate-y-1/2 w-auto h-auto">
+                            <RegisterResidentFaceModal id={selectedId} />
+                            <div className="absolute top-[-20px] right-[-20px]">
+                              <Dialog.Close asChild>
+                                <div className="w-10 h-10 bg-[#7F265B] rounded-full flex items-center justify-center  cursor-pointer">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      fill="#fff"
+                                      d="M16.95 8.464a1 1 0 0 0-1.414-1.414L12 10.586L8.464 7.05A1 1 0 1 0 7.05 8.464L10.586 12L7.05 15.536a1 1 0 1 0 1.414 1.414L12 13.414l3.536 3.536a1 1 0 1 0 1.414-1.414L13.414 12z"
+                                    ></path>
+                                  </svg>
+                                </div>
+                              </Dialog.Close>
+                            </div>
+                          </Dialog.Content>
+                        </Dialog.Portal>
+                      </Dialog.Root>
+                      <button className="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="mr-2 h-4 w-4"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="m11.52 14.929 5.917-5.917a8.2 8.2 0 0 1-2.661-1.787 8.2 8.2 0 0 1-1.788-2.662L7.07 10.48c-.462.462-.693.692-.891.947a5.2 5.2 0 0 0-.599.969c-.139.291-.242.601-.449 1.22l-1.088 3.267a.848.848 0 0 0 1.073 1.073l3.266-1.088c.62-.207.93-.31 1.221-.45q.518-.246.969-.598c.255-.199.485-.43.947-.891" />
+                          <path d="M3.25 22a.75.75 0 0 1 .75-.75h16a.75.75 0 0 1 0 1.5H4a.75.75 0 0 1-.75-.75" />
+                        </svg>
+                        Edit
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Card Footer */}
         {sortedUnregisteredResidents.length > 0 && (

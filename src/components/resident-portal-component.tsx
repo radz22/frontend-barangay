@@ -1,19 +1,26 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import * as faceapi from "face-api.js";
 import axios from "axios";
-import FaceRegister from "../components/FaceRegister";
 import FaceDetector from "../components/FaceDetector";
-export interface FaceData {
-  _id: string;
+export interface Resident {
+  _id?: string;
+  staffaccountcreate?: string;
+  cencusid?: string;
   firstName: string;
   lastName: string;
-  descriptor: number[];
+  middlename?: string;
+  dateofbirth: string;
+  gender: "male" | "female" | "other";
+  civilstatus: "single" | "married" | "widowed" | "separated";
+  descriptor: number[]; // Fixed to 128 elements in implementation
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
 }
 
-const FaceRecognition: React.FC = () => {
+const ResidentPortalComponent = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [faces, setFaces] = useState<FaceData[]>([]);
-  const [showRegister, setShowRegister] = useState(false);
+  const [faces, setFaces] = useState<Resident[]>([]);
 
   useEffect(() => {
     const loadModelsAndFaces = async () => {
@@ -26,7 +33,7 @@ const FaceRecognition: React.FC = () => {
         ]);
 
         const { data } = await axios.get(
-          "https://backend-api-5m5k.onrender.com/api/image"
+          "http://localhost:3000/api/resident/resident"
         );
         setFaces(data);
         setIsLoading(false);
@@ -37,29 +44,13 @@ const FaceRecognition: React.FC = () => {
 
     loadModelsAndFaces();
   }, []);
-  console.log(faces);
-  const handleNewFace = (face: FaceData) => {
-    setFaces((prev) => [...prev, face]);
-  };
 
   return (
     <div style={{ padding: 20 }}>
       <h1>Face Recognition System</h1>
-      {isLoading ? (
-        <p>Loading models...</p>
-      ) : showRegister ? (
-        <FaceRegister
-          onRegister={handleNewFace}
-          onCancel={() => setShowRegister(false)}
-        />
-      ) : (
-        <FaceDetector
-          faces={faces}
-          onRegisterClick={() => setShowRegister(true)}
-        />
-      )}
+      {isLoading ? <p>Loading models...</p> : <FaceDetector faces={faces} />}
     </div>
   );
 };
 
-export default FaceRecognition;
+export default ResidentPortalComponent;

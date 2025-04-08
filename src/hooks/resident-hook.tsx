@@ -9,13 +9,14 @@ import {
   getAllResidentData,
   getUserResidentDataById,
   deleteById,
+  registerFace,
 } from "../services/resident-service";
 import { residentType } from "../type/user/resident-profilling-zod";
 const ResidentHook = () => {
   const queryClient = useQueryClient();
   const [_, setResidentDataUser] = useState<residentType>();
 
-  const { data: residentData } = useQuery({
+  const { data: residentData, isLoading } = useQuery({
     queryKey: ["resident"],
     queryFn: getAllResidentData,
   });
@@ -52,6 +53,16 @@ const ResidentHook = () => {
       handleErrorAlert(error.response.data.error);
     },
   });
+  const faceRegisterMutation = useMutation({
+    mutationFn: registerFace,
+    onSuccess: (data) => {
+      handleSuccessAlert(data.message);
+      queryClient.invalidateQueries({ queryKey: ["resident"] });
+    },
+    onError: (error: any) => {
+      handleErrorAlert(error.response.data.error);
+    },
+  });
   const handleCreateResident = (data: residentType) => {
     createResidentMutation.mutate(data);
   };
@@ -62,6 +73,11 @@ const ResidentHook = () => {
   const handleDelete = (id: string | null) => {
     deleteResidentDataByIdMutation.mutate(id);
   };
+  const handleRegisterFace = (id: string | undefined, descriptor: number[]) => {
+    if (id) {
+      faceRegisterMutation.mutateAsync({ id, descriptor });
+    }
+  };
   return {
     handleCreateResident,
     createResidentMutation,
@@ -69,6 +85,9 @@ const ResidentHook = () => {
     handleGetUserResidentDataById,
     handleDelete,
     deleteResidentDataByIdMutation,
+    isLoading,
+    faceRegisterMutation,
+    handleRegisterFace,
   };
 };
 

@@ -1,20 +1,17 @@
 import React, { useRef, useState, useEffect } from "react";
 import * as faceapi from "face-api.js";
-import axios from "axios";
-import { Resident } from "./resident-portal-component";
-interface Props {
-  onRegister: (face: Resident) => void;
-  onCancel: () => void;
+import ResidentHook from "../../hooks/resident-hook";
+interface RegisterResidentFaceModalProps {
+  id: string | undefined;
 }
-
-const FaceRegister: React.FC<Props> = ({ onRegister, onCancel }) => {
+const RegisterResidentFaceModal: React.FC<RegisterResidentFaceModalProps> = ({
+  id,
+}) => {
+  const { faceRegisterMutation, handleRegisterFace } = ResidentHook();
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [streaming, setStreaming] = useState(false);
   const [angleMessage, setAngleMessage] = useState("");
-
   const loadModels = async () => {
     const MODEL_URL = "/models";
     await Promise.all([
@@ -29,10 +26,11 @@ const FaceRegister: React.FC<Props> = ({ onRegister, onCancel }) => {
   }, []);
 
   const startCamera = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     if (videoRef.current) {
       videoRef.current.srcObject = stream;
       setStreaming(true);
+      setAngleMessage("Open Camera");
     }
     setTimeout(() => detectFaceLoop(), 1000);
   };
@@ -41,15 +39,27 @@ const FaceRegister: React.FC<Props> = ({ onRegister, onCancel }) => {
     if (videoRef.current?.srcObject) {
       const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
       tracks.forEach((track) => track.stop());
+      videoRef.current.srcObject = null; // clear the video feed
     }
+
     setStreaming(false);
-    canvasRef.current?.getContext("2d")?.clearRect(0, 0, 640, 480);
+    setAngleMessage("Close Camera");
+
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        // Fill canvas with black or white screen
+        ctx.fillStyle = "#000"; // change to "#fff" for white
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+    }
   };
 
   const detectFaceLoop = async () => {
     if (!videoRef.current || !canvasRef.current) return;
-    const video = videoRef.current;
 
+    const video = videoRef.current;
     const result = await faceapi
       .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks()
@@ -80,47 +90,43 @@ const FaceRegister: React.FC<Props> = ({ onRegister, onCancel }) => {
 
     if (streaming) setTimeout(() => detectFaceLoop(), 300);
   };
-
   const validateAndRegister = async () => {
     if (!videoRef.current) return;
 
-    const detection = await faceapi
-      .detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions())
-      .withFaceLandmarks()
-      .withFaceDescriptor();
+    try {
+      const detection = await faceapi
+        .detectSingleFace(
+          videoRef.current,
+          new faceapi.TinyFaceDetectorOptions()
+        )
+        .withFaceLandmarks()
+        .withFaceDescriptor();
 
-    if (!detection) {
-      alert("No face detected.");
-      return;
-    }
-
-    const leftEye = detection.landmarks.getLeftEye();
-    const rightEye = detection.landmarks.getRightEye();
-    const eyeDistance = Math.abs(leftEye[0].x - rightEye[3].x);
-
-    if (eyeDistance < 40) {
-      alert("Face the camera directly.");
-      return;
-    }
-
-    const descriptor = Array.from(detection.descriptor as Float32Array);
-    const res = await axios.post(
-      "https://backend-api-5m5k.onrender.com/api/image",
-      {
-        firstName,
-        lastName,
-        descriptor,
+      if (!detection) {
+        return;
       }
-    );
 
-    onRegister(res.data);
-    setFirstName("");
-    setLastName("");
-    stopCamera();
+      const leftEye = detection.landmarks.getLeftEye();
+      const rightEye = detection.landmarks.getRightEye();
+      const eyeDistance = Math.abs(leftEye[0].x - rightEye[3].x);
+
+      if (eyeDistance < 40) {
+        alert("Face the camera directly.");
+        return;
+      }
+
+      const descriptor = Array.from(detection.descriptor as Float32Array);
+
+      handleRegisterFace(id, descriptor);
+      stopCamera();
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("Error submitting form. Please try again.");
+    }
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 space-y-6 bg-white shadow-xl rounded-xl mt-10">
+    <div className="mx-auto p-6 space-y-6 bg-white shadow-xl rounded-xl mt-10 w-[500px]">
       <h2 className="text-2xl font-bold text-center">Register New Face</h2>
 
       <div className="flex justify-center gap-4">
@@ -148,7 +154,7 @@ const FaceRegister: React.FC<Props> = ({ onRegister, onCancel }) => {
           height="480"
           autoPlay
           muted
-          className="absolute top-0 left-0 w-full h-full object-cover"
+          className="absolute top-0 left-0 w-full h-full object-cover bg-black"
         />
         <canvas
           ref={canvasRef}
@@ -159,45 +165,15 @@ const FaceRegister: React.FC<Props> = ({ onRegister, onCancel }) => {
       </div>
 
       <p className="text-center font-medium text-gray-700">{angleMessage}</p>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <input
-          type="text"
-          placeholder="First name"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          className="border px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-        <input
-          type="text"
-          placeholder="Last name"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          className="border px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
-
-      <div className="flex flex-col sm:flex-row gap-4 justify-center mt-4">
-        <button
-          onClick={validateAndRegister}
-          disabled={!firstName || !lastName}
-          className={`px-6 py-2 rounded text-white transition ${
-            firstName && lastName
-              ? "bg-green-600 hover:bg-green-700"
-              : "bg-gray-400 cursor-not-allowed"
-          }`}
-        >
-          Register
-        </button>
-        <button
-          onClick={onCancel}
-          className="px-6 py-2 rounded bg-gray-300 hover:bg-gray-400 transition"
-        >
-          Cancel
-        </button>
-      </div>
+      <button
+        className="px-3 py-3 bg-[#7F265B] rounded-lg cursor-pointe text-white font-semibold w-full"
+        onClick={validateAndRegister}
+        disabled={faceRegisterMutation.isPending}
+      >
+        Register Face
+      </button>
     </div>
   );
 };
 
-export default FaceRegister;
+export default RegisterResidentFaceModal;

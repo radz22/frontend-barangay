@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as faceapi from "face-api.js";
-import { FaceData } from "../pages/face-detection";
 
+import { Resident } from "./resident-portal-component";
 interface Props {
-  faces: FaceData[];
-  onRegisterClick: () => void;
+  faces: Resident[];
 }
 
-const FaceDetector: React.FC<Props> = ({ faces, onRegisterClick }) => {
+const FaceDetector: React.FC<Props> = ({ faces }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [recognizedUser, setRecognizedUser] = useState<{
@@ -110,13 +109,6 @@ const FaceDetector: React.FC<Props> = ({ faces, onRegisterClick }) => {
       ) : (
         <p className="text-gray-500">No recognized face detected</p>
       )}
-
-      <button
-        onClick={onRegisterClick}
-        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-200"
-      >
-        Register New Face
-      </button>
     </div>
   );
 };
