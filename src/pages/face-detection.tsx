@@ -25,7 +25,9 @@ const FaceRecognition: React.FC = () => {
           faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),
         ]);
 
-        const { data } = await axios.get("http://localhost:3000/api/image");
+        const { data } = await axios.get(
+          "https://backend-api-5m5k.onrender.com/api/image"
+        );
         setFaces(data);
         setIsLoading(false);
       } catch (error) {
