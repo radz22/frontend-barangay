@@ -51,7 +51,7 @@ export const registerFace = async ({
 }) => {
   try {
     const response = await axios.put(
-      `http://localhost:3000/api/resident/${id}`,
+      `https://backend-api-5m5k.onrender.com/api/resident/${id}`,
       { descriptor }
     );
     return response.data;

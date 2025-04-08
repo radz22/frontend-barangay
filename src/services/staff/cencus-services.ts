@@ -3,7 +3,10 @@ import { cencusType } from "../../type/user/cencus-zod";
 
 export const createCencus = async (data: cencusType) => {
   try {
-    const response = await axios.post("http://localhost:3000/api/cencus", data);
+    const response = await axios.post(
+      "https://backend-api-5m5k.onrender.com/api/cencus",
+      data
+    );
     return response.data;
   } catch (error) {
     throw error;
