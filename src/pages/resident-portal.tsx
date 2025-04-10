@@ -1,8 +1,8 @@
-import ResidentPortalComponent from "../components/resident-portal-component";
+import ResidentPortalInput from "../components/resident-face-input";
 const ResidentPortal = () => {
   return (
     <>
-      <ResidentPortalComponent />
+      <ResidentPortalInput />
     </>
   );
 };

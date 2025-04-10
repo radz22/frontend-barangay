@@ -1,5 +1,6 @@
 import axios from "axios";
 import { residentType } from "../type/user/resident-profilling-zod";
+import { ResidentFormData } from "../components/face-verified-details";
 export const createResident = async (data: residentType) => {
   try {
     const response = await axios.post(
@@ -53,6 +54,30 @@ export const registerFace = async ({
     const response = await axios.put(
       `https://backend-api-5m5k.onrender.com/api/resident/${id}`,
       { descriptor }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const updateResident = async (data: ResidentFormData) => {
+  try {
+    const response = await axios.put(
+      `https://backend-api-5m5k.onrender.com/api/resident/update/resident/${data.id}`,
+      {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        middlename: data.middlename,
+        dateofbirth: data.dateofbirth,
+        gender: data.gender,
+        civilstatus: data.civilstatus,
+        nationality: data.nationality,
+        mobilenumber: Number(data.mobilenumber),
+        address: data.address,
+        streetname: data.streetname,
+        province: data.province,
+        isUpdated: data.isUpdated,
+      }
     );
     return response.data;
   } catch (error) {

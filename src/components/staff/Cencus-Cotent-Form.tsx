@@ -253,6 +253,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                 <input
                   {...register("firstname")}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                 />
                 {errors.firstname && (
                   <p className="text-red-500 text-sm">
@@ -267,6 +270,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                 <input
                   {...register("middlename")}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                 />
                 {errors.middlename && (
                   <p className="text-red-500 text-sm">
@@ -281,6 +287,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                 <input
                   {...register("lastname")}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                 />
                 {errors.lastname && (
                   <p className="text-red-500 text-sm">
@@ -879,6 +888,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                           `householdMembers.${index}.firstname` as const
                         )}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                        onChange={(e) => {
+                          e.target.value = e.target.value.toUpperCase();
+                        }}
                       />
                       {errors.householdMembers?.[index]?.firstname && (
                         <p className="text-red-500 text-sm">
@@ -895,6 +907,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                           `householdMembers.${index}.middlename` as const
                         )}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                        onChange={(e) => {
+                          e.target.value = e.target.value.toUpperCase();
+                        }}
                       />
                       {errors.householdMembers?.[index]?.middlename && (
                         <p className="text-red-500 text-sm">
@@ -912,6 +927,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                           `householdMembers.${index}.lastname` as const
                         )}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                        onChange={(e) => {
+                          e.target.value = e.target.value.toUpperCase();
+                        }}
                       />
                       {errors.householdMembers?.[index]?.lastname && (
                         <p className="text-red-500 text-sm">

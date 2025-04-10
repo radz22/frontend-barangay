@@ -71,6 +71,12 @@ const ResidentPortal = lazy(() =>
     default: module.default,
   }))
 );
+const ResidentFacePortal = lazy(() =>
+  import("./pages/resident-face-portal").then((module) => ({
+    default: module.default,
+  }))
+);
+
 function App() {
   return (
     <Router>
@@ -82,6 +88,7 @@ function App() {
           <Route path="/page/reset-password/:id" element={<ResetPassword />} />
           <Route path="/page/unauthorized" element={<Unauthorized />} />
           <Route path="/page/resident-portal" element={<ResidentPortal />} />
+          <Route path="/page/face-portal" element={<ResidentFacePortal />} />
 
           <Route element={<ProtectedRoute allowedRoles={["admin", "staff"]} />}>
             <Route path="/page/staff" element={<StaffCencus />} />

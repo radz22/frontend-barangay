@@ -12,7 +12,13 @@ export interface Resident {
   dateofbirth: string;
   gender: "male" | "female" | "other";
   civilstatus: "single" | "married" | "widowed" | "separated";
-  descriptor: number[]; // Fixed to 128 elements in implementation
+  descriptor: number[];
+  nationality?: string;
+  mobilenumber?: number;
+  address?: string;
+  streetname?: string;
+  province?: string;
+  isUpdated?: boolean;
   createdAt?: string;
   updatedAt?: string;
   __v?: number;

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { ResidentFormData } from "../components/face-verified-details";
 import {
   handleSuccessAlert,
   handleErrorAlert,
@@ -10,6 +11,7 @@ import {
   getUserResidentDataById,
   deleteById,
   registerFace,
+  updateResident,
 } from "../services/resident-service";
 import { residentType } from "../type/user/resident-profilling-zod";
 const ResidentHook = () => {
@@ -63,6 +65,16 @@ const ResidentHook = () => {
       handleErrorAlert(error.response.data.error);
     },
   });
+  const updateResidentMutation = useMutation({
+    mutationFn: updateResident,
+    onSuccess: () => {
+      handleSuccessAlert("Updated Succesfuly ");
+      queryClient.invalidateQueries({ queryKey: ["resident"] });
+    },
+    onError: (error: any) => {
+      handleErrorAlert(error.response.data.error);
+    },
+  });
   const handleCreateResident = (data: residentType) => {
     createResidentMutation.mutate(data);
   };
@@ -78,6 +90,9 @@ const ResidentHook = () => {
       faceRegisterMutation.mutateAsync({ id, descriptor });
     }
   };
+  const handleUpdateResident = (data: ResidentFormData) => {
+    updateResidentMutation.mutateAsync(data);
+  };
   return {
     handleCreateResident,
     createResidentMutation,
@@ -88,6 +103,8 @@ const ResidentHook = () => {
     isLoading,
     faceRegisterMutation,
     handleRegisterFace,
+    handleUpdateResident,
+    updateResidentMutation,
   };
 };
 
