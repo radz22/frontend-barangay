@@ -204,7 +204,7 @@ const FaceDetector: React.FC<Props> = ({ faces }) => {
         try {
           setFaceMatch(true);
           const response = await axios.get(
-            `http://localhost:3000/api/image/${firstName}/${lastName}`
+            `https://backend-api-5m5k.onrender.com/api/image/${firstName}/${lastName}`
           );
 
           if (isMounted) {
