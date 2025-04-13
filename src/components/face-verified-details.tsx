@@ -1,11 +1,12 @@
 import { Resident } from "./resident-portal-component";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useEffect } from "react";
 import ResidentHook from "../hooks/resident-hook";
 import { Link } from "react-router-dom";
-// Enhanced Zod validation schema
+import { residentUpdate } from "../type/user/resident-profilling-zod";
 const residentSchema = z.object({
   id: z.string().optional(),
   firstName: z.string().min(1, "First name is required"),
@@ -22,7 +23,7 @@ const residentSchema = z.object({
   address: z.string().optional(),
   streetname: z.string().optional(),
   province: z.string().optional(),
-  isUpdated: z.boolean().optional(),
+  cloudinaryphoto: z.string().min(1, " required"),
 });
 
 export type ResidentFormData = z.infer<typeof residentSchema>;
@@ -34,10 +35,18 @@ interface FaceVerifiedDetailsProps {
 const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
   residentDetails,
 }) => {
-  const { handleUpdateResident, updateResidentMutation } = ResidentHook();
+  const [preview, setPreview] = useState<null | string>(null);
+
+  const {
+    handleCreateNewResidentUpdate,
+    createUpdateResident,
+    handleGetReason,
+    reasonData,
+  } = ResidentHook();
   const {
     register,
     handleSubmit,
+    setValue,
     reset,
     formState: { errors },
   } = useForm<ResidentFormData>({
@@ -65,22 +74,75 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
         mobilenumber: residentDetails?.mobilenumber?.toString()
           ? residentDetails?.mobilenumber?.toString()
           : "",
-
-        isUpdated: true,
       });
+
+      handleGetReason(residentDetails._id);
     }
   }, [residentDetails, reset]);
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        alert("Must be an image file");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = reader.result as string;
+        setValue("cloudinaryphoto", base64);
+        setPreview(base64);
+      };
+      reader.onerror = () => {
+        alert("Failed to read file");
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setValue("cloudinaryphoto", "");
+      setPreview(null);
+    }
+  };
+
   const onSubmit = (data: ResidentFormData) => {
-    handleUpdateResident(data);
+    if (!residentDetails?._id) return;
+
+    const updateData: residentUpdate = {
+      updateid: residentDetails._id,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      middlename: data.middlename || undefined,
+      dateofbirth: data.dateofbirth,
+      gender: data.gender,
+      civilstatus: data.civilstatus,
+      nationality: data.nationality,
+      mobilenumber: Number(data.mobilenumber) || undefined,
+      address: data.address,
+      streetname: data.streetname,
+      province: data.province,
+      cloudinaryphoto: data.cloudinaryphoto,
+    };
+
+    handleCreateNewResidentUpdate(updateData);
   };
 
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6">
       <div className="bg-white p-6 rounded-lg shadow-lg space-y-6">
-        <h3 className="text-2xl font-semibold text-gray-800">
-          Resident Details
-        </h3>
+        <div className="space-y-2">
+          <h3 className="text-2xl font-semibold text-gray-800">
+            Resident Details
+          </h3>
+
+          {reasonData?.reason && (
+            <div className="p-4 bg-red-50 border-l-4 border-red-400 rounded">
+              <p className="text-red-700 font-semibold">Update Declined</p>
+              <p className="text-sm text-red-600 mt-1">
+                Reason: <span className="font-medium">{reasonData.reason}</span>
+              </p>
+            </div>
+          )}
+        </div>
         <div className="space-y-4">
           {/* Form Inputs for Updating Resident Details */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -282,6 +344,37 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
               </div>
             </div>
 
+            <div>
+              <h1 className="mt-10 text-lg font-semibold">
+                Proof of Update Profile
+              </h1>
+              <div className="mb-6">
+                <input
+                  type="file"
+                  id="image"
+                  onChange={handleImageChange}
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                />
+                {errors.cloudinaryphoto && (
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.cloudinaryphoto.message}
+                  </p>
+                )}
+              </div>
+
+              {preview && (
+                <div className="mb-6">
+                  <h3 className="text-sm font-medium text-gray-700 mb-2">
+                    Preview:
+                  </h3>
+                  <img
+                    src={preview}
+                    alt="Preview"
+                    className="w-full h-64 rounded-lg shadow-sm"
+                  />
+                </div>
+              )}
+            </div>
             <div className="flex justify-end space-x-4">
               <Link to="/page/resident-portal">
                 <button
@@ -293,12 +386,10 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
               </Link>
               <button
                 type="submit"
-                disabled={updateResidentMutation.isPending}
+                disabled={createUpdateResident.isPending}
                 className="px-4 py-2 bg-blue-500 text-white rounded-md"
               >
-                {updateResidentMutation.isPending
-                  ? "Loading..."
-                  : "Save Changes"}
+                {createUpdateResident.isPending ? "Loading..." : "Save Changes"}
               </button>
             </div>
           </form>

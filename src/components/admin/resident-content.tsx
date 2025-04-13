@@ -1,22 +1,20 @@
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { ResidentProfillingContent } from "../user/Resident-Profilling-Content";
 import ResidentDataTable from "./resident-data-table";
-import ResidentHook from "../../hooks/resident-hook";
+import ResidentApprovalData from "./resident-approval-data";
 const ResidentContent = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const { handleCreateResident, createResidentMutation } = ResidentHook();
 
   return (
     <div className="w-full h-screens">
-      <div className="w-full flex items-end justify-end px-4">
+      <div className="w-full flex items-end justify-end px-4 flex-col">
         <Dialog.Root open={open} onOpenChange={setOpen}>
           <Dialog.Trigger>
             <button
               className="w-auto py-3 px-3 bg-[#7F265B] text-white rounded-lg  font-semibold "
               onClick={() => setOpen(true)}
             >
-              Create Resident
+              Resident Update Approval
             </button>
           </Dialog.Trigger>
 
@@ -24,11 +22,7 @@ const ResidentContent = () => {
             <Dialog.Overlay className="fixed inset-0 bg-black/50" />
             <Dialog.Content className="fixed top-1/2 left-1/2 bg-white p-6 rounded-lg shadow-lg transform -translate-x-1/2 -translate-y-1/2 w-[70%] h-auto">
               <div className="max-h-[80vh] overflow-auto">
-                <ResidentProfillingContent
-                  handleCreate={handleCreateResident}
-                  createResidentMutation={createResidentMutation}
-                  setOpen={() => setOpen(false)}
-                />
+                <ResidentApprovalData />
               </div>
               <div className="absolute top-[-20px] right-[-20px]">
                 <Dialog.Close asChild>

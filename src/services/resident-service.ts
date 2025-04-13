@@ -1,6 +1,9 @@
 import axios from "axios";
 import { residentType } from "../type/user/resident-profilling-zod";
-import { ResidentFormData } from "../components/face-verified-details";
+import {
+  residentUpdate,
+  ResidentNew,
+} from "../type/user/resident-profilling-zod";
 export const createResident = async (data: residentType) => {
   try {
     const response = await axios.post(
@@ -60,10 +63,10 @@ export const registerFace = async ({
     throw error;
   }
 };
-export const updateResident = async (data: ResidentFormData) => {
+export const updateResident = async (data: ResidentNew) => {
   try {
     const response = await axios.put(
-      `https://backend-api-5m5k.onrender.com/api/resident/update/resident/${data.id}`,
+      `http://localhost:3000/api/resident/update/resident/${data.id}`,
       {
         firstName: data.firstName,
         lastName: data.lastName,
@@ -76,8 +79,75 @@ export const updateResident = async (data: ResidentFormData) => {
         address: data.address,
         streetname: data.streetname,
         province: data.province,
-        isUpdated: data.isUpdated,
+        cloudinaryid: data.cloudinaryid,
       }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateResidentValidate = async (data: residentUpdate) => {
+  try {
+    const response = await axios.post(
+      `https://backend-api-5m5k.onrender.com/api/residentupdate`,
+      {
+        updateid: data.updateid,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        middlename: data.middlename,
+        dateofbirth: data.dateofbirth,
+        gender: data.gender,
+        civilstatus: data.civilstatus,
+        nationality: data.nationality,
+        mobilenumber: Number(data.mobilenumber),
+        address: data.address,
+        streetname: data.streetname,
+        province: data.province,
+        image: data.cloudinaryphoto,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const getAllUpdateApproval = async () => {
+  try {
+    const response = await axios.get(
+      "https://backend-api-5m5k.onrender.com/api/residentupdate"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const decline = async ({
+  reason,
+  reasonid,
+}: {
+  reason: string;
+  reasonid: string;
+}) => {
+  try {
+    const response = await axios.post(
+      "https://backend-api-5m5k.onrender.com/api/residentupdate/decline",
+      {
+        reason,
+        reasonid,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getReasonbyResident = async (id: string | undefined) => {
+  try {
+    const response = await axios.get(
+      `https://backend-api-5m5k.onrender.com/api/residentupdate/${id}`
     );
     return response.data;
   } catch (error) {

@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ResidentFormData } from "../components/face-verified-details";
+import { reasonDataType } from "../type/reason-type";
+import {
+  residentUpdate,
+  ResidentNew,
+} from "../type/user/resident-profilling-zod";
+
 import {
   handleSuccessAlert,
   handleErrorAlert,
@@ -12,15 +17,24 @@ import {
   deleteById,
   registerFace,
   updateResident,
+  updateResidentValidate,
+  getAllUpdateApproval,
+  decline,
+  getReasonbyResident,
 } from "../services/resident-service";
 import { residentType } from "../type/user/resident-profilling-zod";
 const ResidentHook = () => {
   const queryClient = useQueryClient();
   const [_, setResidentDataUser] = useState<residentType>();
-
+  const [reasonData, setReasonData] = useState<reasonDataType>();
+  //mutation
   const { data: residentData, isLoading } = useQuery({
     queryKey: ["resident"],
     queryFn: getAllResidentData,
+  });
+  const { data: getAll } = useQuery({
+    queryKey: ["updateresident"],
+    queryFn: getAllUpdateApproval,
   });
   const createResidentMutation = useMutation({
     mutationFn: createResident,
@@ -28,6 +42,16 @@ const ResidentHook = () => {
       handleSuccessAlert("Submitted");
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ["resident"] });
+    },
+    onError: (error: any) => {
+      handleErrorAlert(error.response.data.error);
+    },
+  });
+  const createUpdateResident = useMutation({
+    mutationFn: updateResidentValidate,
+    onSuccess: () => {
+      handleSuccessAlert("Submitted");
+      queryClient.invalidateQueries({ queryKey: ["updateresident"] });
     },
     onError: (error: any) => {
       handleErrorAlert(error.response.data.error);
@@ -68,13 +92,34 @@ const ResidentHook = () => {
   const updateResidentMutation = useMutation({
     mutationFn: updateResident,
     onSuccess: () => {
-      handleSuccessAlert("Updated Succesfuly ");
+      handleSuccessAlert("Success Approve ");
       queryClient.invalidateQueries({ queryKey: ["resident"] });
     },
     onError: (error: any) => {
       handleErrorAlert(error.response.data.error);
     },
   });
+  const getReasonMutation = useMutation({
+    mutationFn: getReasonbyResident,
+    onSuccess: (data) => {
+      setReasonData(data.data);
+      queryClient.invalidateQueries({ queryKey: ["reason"] });
+    },
+    onError: (error: any) => {
+      handleErrorAlert(error.response.data.error);
+    },
+  });
+  const declineMutation = useMutation({
+    mutationFn: decline,
+    onSuccess: () => {
+      handleSuccessAlert("Submitted");
+      queryClient.invalidateQueries({ queryKey: ["updateresident"] });
+    },
+    onError: (error: any) => {
+      handleErrorAlert(error.response.data.error);
+    },
+  });
+  //function
   const handleCreateResident = (data: residentType) => {
     createResidentMutation.mutate(data);
   };
@@ -90,8 +135,20 @@ const ResidentHook = () => {
       faceRegisterMutation.mutateAsync({ id, descriptor });
     }
   };
-  const handleUpdateResident = (data: ResidentFormData) => {
+  const handleUpdateResident = (data: ResidentNew) => {
     updateResidentMutation.mutateAsync(data);
+  };
+
+  const handleCreateNewResidentUpdate = (data: residentUpdate) => {
+    createUpdateResident.mutate(data);
+  };
+
+  const handleGetReason = (id: string | undefined) => {
+    getReasonMutation.mutate(id);
+  };
+
+  const handleDecline = (reason: string, reasonid: string) => {
+    declineMutation.mutate({ reason, reasonid });
   };
   return {
     handleCreateResident,
@@ -105,6 +162,13 @@ const ResidentHook = () => {
     handleRegisterFace,
     handleUpdateResident,
     updateResidentMutation,
+    handleCreateNewResidentUpdate,
+    createUpdateResident,
+    getAll,
+    handleGetReason,
+    reasonData,
+    handleDecline,
+    declineMutation,
   };
 };
 

@@ -28,3 +28,55 @@ export const residentSchema = z.object({
 });
 
 export type residentType = z.infer<typeof residentSchema>;
+
+export interface residentUpdate {
+  updateid: string;
+  firstName: string;
+  lastName: string;
+  middlename: string | undefined;
+  dateofbirth: string;
+  gender: string;
+  civilstatus: string | undefined;
+  nationality: string | undefined;
+  mobilenumber: number | undefined;
+  address: string | undefined;
+  streetname: string | undefined;
+  province: string | undefined;
+  cloudinaryphoto: string | undefined;
+}
+export type residentApprovalData = {
+  _id: string;
+  updateid: string;
+  firstName: string;
+  middlename: string;
+  lastName: string;
+  dateofbirth: string; // ISO date string: "YYYY-MM-DD"
+  gender: "male" | "female" | "other"; // You can adjust if needed
+  civilstatus: "single" | "married" | "divorced" | "widowed"; // Add other statuses as needed
+  mobilenumber: string | null;
+  nationality: string;
+  address: string;
+  province: string;
+  cloudinaryphoto: string;
+  cloudinaryid: string;
+  streetname: string;
+  createdAt: string; // ISO timestamp
+  updatedAt: string; // ISO timestamp
+  __v: number;
+};
+
+export type ResidentNew = {
+  id: string;
+  firstName: string;
+  middlename: string;
+  lastName: string;
+  dateofbirth: string;
+  gender: string;
+  civilstatus: string;
+  mobilenumber: string | null;
+  nationality: string;
+  address: string;
+  province: string;
+  streetname: string;
+  cloudinaryid: string;
+};
