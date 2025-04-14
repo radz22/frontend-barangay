@@ -66,7 +66,7 @@ export const registerFace = async ({
 export const updateResident = async (data: ResidentNew) => {
   try {
     const response = await axios.put(
-      `http://localhost:3000/api/resident/update/resident/${data.id}`,
+      `https://backend-api-5m5k.onrender.com/api/resident/update/resident/${data.id}`,
       {
         firstName: data.firstName,
         lastName: data.lastName,
