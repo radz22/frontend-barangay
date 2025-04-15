@@ -1,9 +1,8 @@
-import ResidentHook from "../../hooks/resident-hook";
 import { residentType } from "../../type/user/resident-profilling-zod";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useState } from "react";
 import RegisterResidentFaceModal from "./register-resident-face-modal";
-
+import { useResidentData } from "../../hooks/use-resident-data";
 interface RegisterResidentProps {
   setType: (type: "resident" | "cencus") => void;
   cookieEmail: string | undefined;
@@ -13,7 +12,7 @@ const RegisterResidentFaceComponent: React.FC<RegisterResidentProps> = ({
   setType,
   cookieEmail,
 }) => {
-  const { residentData, isLoading } = ResidentHook();
+  const { data: residentData, isLoading } = useResidentData();
   const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
 
   const sortedResident = [...(residentData?.data || [])].sort((a, b) => {

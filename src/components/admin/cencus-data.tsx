@@ -4,8 +4,10 @@ import * as Dialog from "@radix-ui/react-dialog";
 import CencusDataModal from "./cencus-data-modal";
 import { useState } from "react";
 import DeleteLayout from "./delete-layout";
+import { useCencusData } from "../../hooks/staff/use-cencus-data";
 const CencusDataTable = () => {
-  const { cencusData, handleArchievedDelete, deleteArchiveCencusbyIdMutation } =
+  const { data: cencusData } = useCencusData();
+  const { handleArchievedDelete, deleteArchiveCencusbyIdMutation } =
     CencusHook();
   const [selectedUser, setSelectedUser] = useState<cencusType | null>(null);
   const [selectId, setSelectId] = useState<string | null>(null);

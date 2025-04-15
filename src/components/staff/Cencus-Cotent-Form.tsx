@@ -190,7 +190,6 @@ export const CencusContentForm: React.FC<CencusProps> = ({
       setValue("staffaccountcreate", cookieEmail, { shouldValidate: true });
       const updatedData = getValues();
       await handleCreateCencus(updatedData);
-      console.log(updatedData);
       stopCamera();
     } catch (error) {
       console.error("Submission error:", error);

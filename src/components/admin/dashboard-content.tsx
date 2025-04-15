@@ -1,24 +1,14 @@
 import BarChart from "../chart/bar-chart";
 import Count from "../../utils/count-data";
 const DashBoardContent = () => {
-  const {
-    totalOfMale,
-    totalOfFemale,
-    elementaryGraduateTotal,
-    elementaryUnderGraduateTotal,
-    highSchoolGraduateTotal,
-    highSchoolUnderGraduateTotal,
-    seniorHighSchoolGraduateTotal,
-    seniorHighSchoolUnderGraduateTotal,
-    collegeGraduateTotal,
-    collegeUnderGraduateTotal,
-  } = Count();
+  const counts = Count();
+
   const data = {
     labels: ["Male", "Female"],
     datasets: [
       {
         label: "GENDER",
-        data: [totalOfMale, totalOfFemale],
+        data: [counts.totalOfMale, counts.totalOfFemale],
         backgroundColor: [
           "rgb(255, 99, 132)",
           "rgb(54, 162, 235)",
@@ -39,7 +29,7 @@ const DashBoardContent = () => {
     datasets: [
       {
         label: "ELEMENTARY STATISTIC",
-        data: [elementaryGraduateTotal, elementaryUnderGraduateTotal],
+        data: [counts.elementary.grad, counts.elementary.underGrad],
         backgroundColor: [
           "rgb(75, 192, 192)", // Teal
           "rgb(153, 102, 255)", // Purple
@@ -58,7 +48,7 @@ const DashBoardContent = () => {
     datasets: [
       {
         label: "HIGH SCHOOL STATISTIC",
-        data: [highSchoolGraduateTotal, highSchoolUnderGraduateTotal],
+        data: [counts.highSchool.grad, counts.highSchool.underGrad],
         backgroundColor: [
           "rgb(255, 159, 64)", // Orange
           "rgb(54, 162, 235)", // Blue
@@ -80,10 +70,7 @@ const DashBoardContent = () => {
     datasets: [
       {
         label: "SENIOR HIGH SCHOOL STATISTIC",
-        data: [
-          seniorHighSchoolGraduateTotal,
-          seniorHighSchoolUnderGraduateTotal,
-        ],
+        data: [counts.seniorHighSchool.grad, counts.seniorHighSchool.underGrad],
         backgroundColor: [
           "rgb(102, 204, 255)", // Light Blue
           "rgb(255, 140, 0)", // Dark Orange
@@ -101,7 +88,7 @@ const DashBoardContent = () => {
     datasets: [
       {
         label: "COLLEGE STATISTIC",
-        data: [collegeGraduateTotal, collegeUnderGraduateTotal],
+        data: [counts.college.grad, counts.college.underGrad],
         backgroundColor: [
           "rgb(75, 192, 192)", // Teal
           "rgb(255, 159, 64)", // Orange

@@ -1,13 +1,11 @@
-import ResidentHook from "../../hooks/resident-hook";
 import ViewApprovalResident from "./view-approval-resident";
 import { residentApprovalData } from "../../type/user/resident-profilling-zod";
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-
+import { useResidentApprovalData } from "../../hooks/use-resident-update-data";
 const ResidentApprovalData = () => {
-  const { getAll } = ResidentHook();
+  const { data: getAll } = useResidentApprovalData();
   const [resident, setResident] = useState<residentApprovalData | null>(null);
-
   return (
     <div className="container mx-auto p-4">
       <div className="overflow-x-auto bg-white shadow-lg rounded-lg border border-gray-300">
@@ -23,7 +21,7 @@ const ResidentApprovalData = () => {
             </tr>
           </thead>
           <tbody>
-            {getAll.data.map((person: residentApprovalData, index: number) => (
+            {getAll?.data.map((person: residentApprovalData, index: number) => (
               <tr
                 key={index}
                 className="border-b border-gray-300 odd:bg-gray-100 even:bg-white hover:bg-gray-200 transition-all"

@@ -204,7 +204,7 @@ const FaceDetector: React.FC<Props> = ({ faces }) => {
         try {
           setFaceMatch(true);
           const response = await axios.get(
-            `https://backend-api-5m5k.onrender.com/api/image/${firstName}/${lastName}`
+            `https://barangay-api-backend.onrender.com/api/image/${firstName}/${lastName}`
           );
 
           if (isMounted) {
@@ -220,7 +220,6 @@ const FaceDetector: React.FC<Props> = ({ faces }) => {
             setCameraOn(false);
           }
         } catch (error) {
-          console.error("Error fetching resident details:", error);
           if (isMounted) {
             setCameraOn(true); // Keep camera on if fetch fails
           }

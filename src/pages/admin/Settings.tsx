@@ -7,10 +7,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import authHook from "../../hooks/authHook";
 import { resetpasswordtype } from "../../type/user/auth-type";
+import { useAdminData } from "../../hooks/use-admin-setting-data";
 
 export const Settings = () => {
-  const { adminAccountData, handleResetPassword, resetPasswordMutation } =
-    authHook();
+  const { data: adminAccountData } = useAdminData();
+  const { handleResetPassword, resetPasswordMutation } = authHook();
   const {
     register,
     handleSubmit,

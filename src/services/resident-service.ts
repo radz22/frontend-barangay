@@ -7,7 +7,7 @@ import {
 export const createResident = async (data: residentType) => {
   try {
     const response = await axios.post(
-      "https://backend-api-5m5k.onrender.com/api/resident",
+      "https://barangay-api-backend.onrender.com/api/resident",
       data
     );
     return response.data;
@@ -18,7 +18,7 @@ export const createResident = async (data: residentType) => {
 export const getAllResidentData = async () => {
   try {
     const response = await axios.get(
-      "https://backend-api-5m5k.onrender.com/api/resident"
+      "https://barangay-api-backend.onrender.com/api/resident"
     );
     return response.data;
   } catch (error) {
@@ -28,7 +28,7 @@ export const getAllResidentData = async () => {
 export const getUserResidentDataById = async (id: string | undefined) => {
   try {
     const response = await axios.get(
-      `https://backend-api-5m5k.onrender.com/api/resident/${id}`
+      `https://barangay-api-backend.onrender.com/api/resident/${id}`
     );
     return response.data;
   } catch (error) {
@@ -39,7 +39,7 @@ export const getUserResidentDataById = async (id: string | undefined) => {
 export const deleteById = async (id: string | null) => {
   try {
     const response = await axios.delete(
-      `https://backend-api-5m5k.onrender.com/api/resident/${id}`
+      `https://barangay-api-backend.onrender.com/api/resident/${id}`
     );
     return response.data;
   } catch (error) {
@@ -55,7 +55,7 @@ export const registerFace = async ({
 }) => {
   try {
     const response = await axios.put(
-      `https://backend-api-5m5k.onrender.com/api/resident/${id}`,
+      `https://barangay-api-backend.onrender.com/api/resident/${id}`,
       { descriptor }
     );
     return response.data;
@@ -66,7 +66,7 @@ export const registerFace = async ({
 export const updateResident = async (data: ResidentNew) => {
   try {
     const response = await axios.put(
-      `https://backend-api-5m5k.onrender.com/api/resident/update/resident/${data.id}`,
+      `https://barangay-api-backend.onrender.com/api/resident/update/resident/${data.id}`,
       {
         firstName: data.firstName,
         lastName: data.lastName,
@@ -91,7 +91,7 @@ export const updateResident = async (data: ResidentNew) => {
 export const updateResidentValidate = async (data: residentUpdate) => {
   try {
     const response = await axios.post(
-      `https://backend-api-5m5k.onrender.com/api/residentupdate`,
+      `https://barangay-api-backend.onrender.com/api/residentupdate`,
       {
         updateid: data.updateid,
         firstName: data.firstName,
@@ -116,7 +116,7 @@ export const updateResidentValidate = async (data: residentUpdate) => {
 export const getAllUpdateApproval = async () => {
   try {
     const response = await axios.get(
-      "https://backend-api-5m5k.onrender.com/api/residentupdate"
+      "https://barangay-api-backend.onrender.com/api/residentupdate"
     );
     return response.data;
   } catch (error) {
@@ -132,7 +132,7 @@ export const decline = async ({
 }) => {
   try {
     const response = await axios.post(
-      "https://backend-api-5m5k.onrender.com/api/residentupdate/decline",
+      "https://barangay-api-backend.onrender.com/api/residentupdate/decline",
       {
         reason,
         reasonid,
@@ -147,7 +147,7 @@ export const decline = async ({
 export const getReasonbyResident = async (id: string | undefined) => {
   try {
     const response = await axios.get(
-      `https://backend-api-5m5k.onrender.com/api/residentupdate/${id}`
+      `https://barangay-api-backend.onrender.com/api/residentupdate/${id}`
     );
     return response.data;
   } catch (error) {

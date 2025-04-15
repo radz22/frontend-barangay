@@ -9,7 +9,7 @@ import {
 export const signupService = async (signup: signinAndsignupType) => {
   try {
     const response = await axios.post(
-      `https://backend-api-5m5k.onrender.com/api/auth/signup`,
+      `https://barangay-api-backend.onrender.com/api/auth/signup`,
       signup,
       {
         withCredentials: true,
@@ -24,7 +24,7 @@ export const signupService = async (signup: signinAndsignupType) => {
 export const signinService = async (signin: signintype) => {
   try {
     const response = await axios.post(
-      `https://backend-api-5m5k.onrender.com/api/auth/signin`,
+      `https://barangay-api-backend.onrender.com/api/auth/signin`,
       signin,
       {
         withCredentials: true,
@@ -38,7 +38,7 @@ export const signinService = async (signin: signintype) => {
 
 export const logoutService = async () => {
   const response = await axios.post(
-    "https://backend-api-5m5k.onrender.com/api/auth/logout",
+    "https://barangay-api-backend.onrender.com/api/auth/logout",
     {},
     {
       withCredentials: true,
@@ -49,7 +49,7 @@ export const logoutService = async () => {
 export const forgotPasswordService = async (email: forgotpasswordtype) => {
   try {
     const response = await axios.post(
-      "https://backend-api-5m5k.onrender.com/api/auth/forgot-password",
+      "https://barangay-api-backend.onrender.com/api/auth/forgot-password",
       email
     );
     return response.data;
@@ -61,7 +61,7 @@ export const forgotPasswordService = async (email: forgotpasswordtype) => {
 export const resetPasswordService = async (data: resetpasswordtype) => {
   try {
     const response = await axios.put(
-      `https://backend-api-5m5k.onrender.com/api/auth/${data.id}`,
+      `https://barangay-api-backend.onrender.com/api/auth/${data.id}`,
       {
         newpassword: data.newpassword,
       }
@@ -74,7 +74,7 @@ export const resetPasswordService = async (data: resetpasswordtype) => {
 export const getStaffAccountData = async () => {
   try {
     const response = await axios.get(
-      "https://backend-api-5m5k.onrender.com/api/auth"
+      "https://barangay-api-backend.onrender.com/api/auth"
     );
     return response.data;
   } catch (error) {
@@ -84,7 +84,7 @@ export const getStaffAccountData = async () => {
 export const deleteAccount = async (id: string | null) => {
   try {
     const response = await axios.delete(
-      `https://backend-api-5m5k.onrender.com/api/auth/${id}`
+      `https://barangay-api-backend.onrender.com/api/auth/${id}`
     );
     return response.data;
   } catch (error) {
@@ -94,7 +94,7 @@ export const deleteAccount = async (id: string | null) => {
 export const getAdminAccountData = async () => {
   try {
     const response = await axios.get(
-      "https://backend-api-5m5k.onrender.com/api/auth/data/admin"
+      "https://barangay-api-backend.onrender.com/api/auth/data/admin"
     );
     return response.data;
   } catch (error) {

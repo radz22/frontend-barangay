@@ -1,14 +1,15 @@
 import CencusHook from "../../hooks/staff/cencus-hook";
 import { cencusType } from "../../type/user/cencus-zod";
 import { useState } from "react";
+import { useCencusData } from "../../hooks/staff/use-cencus-data";
 const ArchivedTable = () => {
   const {
-    cencusData,
     handleDelete,
     deleteCencusDataByIdMutation,
     handleRestore,
     restoredCencusbyIdMutation,
   } = CencusHook();
+  const { data: cencusData } = useCencusData();
   const [search, setSearch] = useState<string>("");
   const sortedUsers = [...(cencusData?.data || [])].sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();

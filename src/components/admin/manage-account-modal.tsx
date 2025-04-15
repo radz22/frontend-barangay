@@ -4,13 +4,15 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { useState } from "react";
 import ViewAndUpdateAccount from "./view-and-update-account";
 import DeleteLayout from "./delete-layout";
+import { useStaffAccountData } from "../../hooks/use-account-data";
 interface manageAccountDataProps {
   handleClose: () => void;
 }
 const ManageAccountData: React.FC<manageAccountDataProps> = ({
   handleClose,
 }) => {
-  const { accountData, handleDelete, deleteAccountMutation } = authHook();
+  const { data: accountData } = useStaffAccountData();
+  const { handleDelete, deleteAccountMutation } = authHook();
   const [account, setAccount] = useState<accountDatatype | null>(null);
   const [selectId, setSelectId] = useState<string | null>(null);
 

@@ -4,14 +4,13 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { residentType } from "../../type/user/resident-profilling-zod";
 import DeleteLayout from "./delete-layout";
 import ViewResidentData from "./view-resident-data";
-
+import { useResidentData } from "../../hooks/use-resident-data";
 const ResidentDataTable = () => {
   const [selectId, setSelectId] = useState<string | null>(null);
   const [resident, setResident] = useState<residentType | null>(null);
   const [search, setSearch] = useState<string>("");
-
-  const { residentData, handleDelete, deleteResidentDataByIdMutation } =
-    ResidentHook();
+  const { data: residentData } = useResidentData();
+  const { handleDelete, deleteResidentDataByIdMutation } = ResidentHook();
 
   const sortedResident = [...(residentData?.data || [])].sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();

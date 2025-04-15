@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { reasonDataType } from "../type/reason-type";
 import {
   residentUpdate,
@@ -12,13 +12,11 @@ import {
 } from "../components/sweet-alert";
 import {
   createResident,
-  getAllResidentData,
   getUserResidentDataById,
   deleteById,
   registerFace,
   updateResident,
   updateResidentValidate,
-  getAllUpdateApproval,
   decline,
   getReasonbyResident,
 } from "../services/resident-service";
@@ -27,20 +25,11 @@ const ResidentHook = () => {
   const queryClient = useQueryClient();
   const [_, setResidentDataUser] = useState<residentType>();
   const [reasonData, setReasonData] = useState<reasonDataType>();
-  //mutation
-  const { data: residentData, isLoading } = useQuery({
-    queryKey: ["resident"],
-    queryFn: getAllResidentData,
-  });
-  const { data: getAll } = useQuery({
-    queryKey: ["updateresident"],
-    queryFn: getAllUpdateApproval,
-  });
+
   const createResidentMutation = useMutation({
     mutationFn: createResident,
-    onSuccess: (data) => {
+    onSuccess: () => {
       handleSuccessAlert("Submitted");
-      console.log(data);
       queryClient.invalidateQueries({ queryKey: ["resident"] });
     },
     onError: (error: any) => {
@@ -153,18 +142,15 @@ const ResidentHook = () => {
   return {
     handleCreateResident,
     createResidentMutation,
-    residentData,
     handleGetUserResidentDataById,
     handleDelete,
     deleteResidentDataByIdMutation,
-    isLoading,
     faceRegisterMutation,
     handleRegisterFace,
     handleUpdateResident,
     updateResidentMutation,
     handleCreateNewResidentUpdate,
     createUpdateResident,
-    getAll,
     handleGetReason,
     reasonData,
     handleDecline,

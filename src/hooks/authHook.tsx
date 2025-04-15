@@ -1,13 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   signinService,
   signupService,
   logoutService,
   resetPasswordService,
   forgotPasswordService,
-  getStaffAccountData,
   deleteAccount,
-  getAdminAccountData,
 } from "../services/authService";
 import {
   signintype,
@@ -24,14 +22,7 @@ import {
 const authHook = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { data: accountData } = useQuery({
-    queryKey: ["userauth"],
-    queryFn: getStaffAccountData,
-  });
-  const { data: adminAccountData } = useQuery({
-    queryKey: ["adminAccount"],
-    queryFn: getAdminAccountData,
-  });
+
   const signinMutation = useMutation({
     mutationFn: signinService,
     onSuccess: async (data) => {
@@ -99,7 +90,6 @@ const authHook = () => {
     mutationFn: deleteAccount,
     onSuccess: (data) => {
       handleSuccessAlert(data.message);
-      console.log(data.message);
       queryClient.invalidateQueries({ queryKey: ["userauth"] });
     },
     onError: (error: any) => {
@@ -137,10 +127,9 @@ const authHook = () => {
     forgotPasswordMutation,
     handleResetPassword,
     resetPasswordMutation,
-    accountData,
+
     handleDelete,
     deleteAccountMutation,
-    adminAccountData,
   };
 };
 
