@@ -24,7 +24,7 @@ export const signupService = async (signup: signinAndsignupType) => {
 export const signinService = async (signin: signintype) => {
   try {
     const response = await axios.post(
-      `https://barangay-api-backend.onrender.com/api/auth/signin`,
+      `http://localhost:3000/api/auth/signin`,
       signin,
       {
         withCredentials: true,

@@ -18,23 +18,17 @@ import {
   handleErrorAlert,
   handleSuccessAlert,
 } from "../components/sweet-alert";
-
+import { useState } from "react";
 const authHook = () => {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
-
+  const navigate = useNavigate();
+  const [sendSuccess, setSendSuccess] = useState<boolean>(false);
   const signinMutation = useMutation({
     mutationFn: signinService,
     onSuccess: async (data) => {
-      await queryClient.invalidateQueries({ queryKey: ["userauth"] });
-      await queryClient.refetchQueries({ queryKey: ["userauth"] });
-
-      const role = data.user.role;
-      if (role === "staff") {
-        navigate("/page/staff");
-      } else {
-        navigate("/admin/dashboard");
-      }
+      handleSuccessAlert(data.message);
+      setSendSuccess(true);
+      queryClient.invalidateQueries({ queryKey: ["userauth"] });
     },
     onError: (error: any) => {
       handleErrorAlert(error.response.data.error);
@@ -127,7 +121,7 @@ const authHook = () => {
     forgotPasswordMutation,
     handleResetPassword,
     resetPasswordMutation,
-
+    sendSuccess,
     handleDelete,
     deleteAccountMutation,
   };
