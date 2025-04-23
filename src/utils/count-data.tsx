@@ -19,14 +19,22 @@ type GenderCounts = {
 type CountResult = {
   totalOfMale: number;
   totalOfFemale: number;
+  populationtotal: number;
+  populationGet2025: number;
+  populationGet2026: number;
+  populationGet2027: number;
+  populationGet2028: number;
+  populationGet2029: number;
+  populationGet2030: number;
+  populationThisYear: number;
 } & EducationCounts;
 
 const Count = (): CountResult => {
   const { data: cencusData } = useCencusData();
   const { data: residentData } = useResidentData();
+  const currentYear = new Date().getFullYear();
 
   return useMemo(() => {
-    // Initialize default values
     const result: CountResult = {
       totalOfMale: 0,
       totalOfFemale: 0,
@@ -34,13 +42,20 @@ const Count = (): CountResult => {
       highSchool: { grad: 0, underGrad: 0 },
       seniorHighSchool: { grad: 0, underGrad: 0 },
       college: { grad: 0, underGrad: 0 },
+      populationtotal: 0,
+      populationGet2025: 0,
+      populationGet2026: 0,
+      populationGet2027: 0,
+      populationGet2028: 0,
+      populationGet2029: 0,
+      populationGet2030: 0,
+      populationThisYear: 0,
     };
 
     if (!cencusData || !residentData) {
       return result;
     }
 
-    // Process resident data
     const residentGenderCounts = residentData.data.reduce(
       (acc: GenderCounts, item: residentType) => {
         if (item.gender === "male") acc.male++;
@@ -50,21 +65,67 @@ const Count = (): CountResult => {
       { male: 0, female: 0 }
     );
 
-    // Process census data
     const allHouseholdMembers = cencusData.data.flatMap(
       (item: cencusType) => item.householdMembers || []
     );
+    const populationGet2025 = residentData.data.filter(
+      (resident: residentType) => {
+        if (!resident.createdAt) return false;
 
-    const censusGenderCounts = cencusData.data.reduce(
-      (acc: GenderCounts, item: cencusType) => {
-        if (item.gender === "male") acc.male++;
-        if (item.gender === "female") acc.female++;
-        return acc;
-      },
-      { male: 0, female: 0 }
-    );
+        const createdDate = new Date(resident.createdAt);
+        return createdDate.getFullYear() === 2025;
+      }
+    ).length;
+    const populationGet2026 = residentData.data.filter(
+      (resident: residentType) => {
+        if (!resident.createdAt) return false;
 
-    // Count education for both heads and members
+        const createdDate = new Date(resident.createdAt);
+        return createdDate.getFullYear() === 2026;
+      }
+    ).length;
+    const populationGet2027 = residentData.data.filter(
+      (resident: residentType) => {
+        if (!resident.createdAt) return false;
+
+        const createdDate = new Date(resident.createdAt);
+        return createdDate.getFullYear() === 2027;
+      }
+    ).length;
+    const populationGet2028 = residentData.data.filter(
+      (resident: residentType) => {
+        if (!resident.createdAt) return false;
+
+        const createdDate = new Date(resident.createdAt);
+        return createdDate.getFullYear() === 2028;
+      }
+    ).length;
+    const populationGet2029 = residentData.data.filter(
+      (resident: residentType) => {
+        if (!resident.createdAt) return false;
+
+        const createdDate = new Date(resident.createdAt);
+        return createdDate.getFullYear() === 2029;
+      }
+    ).length;
+    const populationGet2030 = residentData.data.filter(
+      (resident: residentType) => {
+        if (!resident.createdAt) return false;
+
+        const createdDate = new Date(resident.createdAt);
+        return createdDate.getFullYear() === 2030;
+      }
+    ).length;
+
+    const populationThisYear = residentData.data.filter(
+      (resident: residentType) => {
+        if (!resident.createdAt) return false;
+
+        const createdDate = new Date(resident.createdAt);
+        return createdDate.getFullYear() === currentYear;
+      }
+    ).length;
+
     const countEducation = (items: cencusType[]): EducationCounts => {
       return items.reduce(
         (acc: EducationCounts, item: cencusType) => {
@@ -108,10 +169,17 @@ const Count = (): CountResult => {
     const headsEducation = countEducation(cencusData.data);
     const membersEducation = countEducation(allHouseholdMembers);
 
-    // Combine results
     return {
-      totalOfMale: residentGenderCounts.male + censusGenderCounts.male,
-      totalOfFemale: residentGenderCounts.female + censusGenderCounts.female,
+      populationThisYear,
+      populationGet2025,
+      populationGet2026,
+      populationGet2027,
+      populationGet2028,
+      populationGet2029,
+      populationGet2030,
+      populationtotal: residentData.data.length,
+      totalOfMale: residentGenderCounts.male,
+      totalOfFemale: residentGenderCounts.female,
       elementary: {
         grad: headsEducation.elementary.grad + membersEducation.elementary.grad,
         underGrad:

@@ -203,12 +203,14 @@ export const CencusContentForm: React.FC<CencusProps> = ({
         <div className="w-full space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Date of Cencus
+              Date of Census
             </label>
             <input
               {...register("dateofcencus")}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed"
               type="date"
+              defaultValue={new Date().toISOString().split("T")[0]}
+              readOnly
             />
             {errors.dateofcencus && (
               <p className="text-red-500 text-sm">
@@ -216,6 +218,7 @@ export const CencusContentForm: React.FC<CencusProps> = ({
               </p>
             )}
           </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Area of Cencus Street
@@ -451,6 +454,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                 <input
                   {...register("occupation")}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                 />
                 {errors.occupation && (
                   <p className="text-red-500 text-sm">
@@ -480,6 +486,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                 </label>
                 <input
                   {...register("streetname")}
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
                 {errors.streetname && (
@@ -495,6 +504,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                 </label>
                 <input
                   {...register("barangay")}
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
                 {errors.barangay && (
@@ -510,6 +522,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                 </label>
                 <input
                   {...register("city")}
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
                 {errors.city && (
@@ -523,6 +538,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                 </label>
                 <input
                   {...register("province")}
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
                 {errors.province && (
@@ -587,6 +605,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                     </label>
                     <input
                       {...register("disabilitytype")}
+                      onChange={(e) => {
+                        e.target.value = e.target.value.toUpperCase();
+                      }}
                       className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                     />
                   </div>
@@ -598,6 +619,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                 </label>
                 <input
                   {...register("existinghealthcondition")}
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
                 {errors.existinghealthcondition && (
@@ -659,6 +683,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                 </label>
                 <input
                   {...register("yearofconstructed")}
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
               </div>
@@ -685,6 +712,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                       </label>
                       <input
                         {...register("barangayresidence")}
+                        onChange={(e) => {
+                          e.target.value = e.target.value.toUpperCase();
+                        }}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                       />
                       {errors.barangayresidence && (
@@ -699,6 +729,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                       </label>
                       <input
                         {...register("cityresidence")}
+                        onChange={(e) => {
+                          e.target.value = e.target.value.toUpperCase();
+                        }}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                       />
                       {errors.cityresidence && (
@@ -713,6 +746,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                       </label>
                       <input
                         {...register("municipalityresidence")}
+                        onChange={(e) => {
+                          e.target.value = e.target.value.toUpperCase();
+                        }}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                       />
                       {errors.municipalityresidence && (
@@ -727,6 +763,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                       </label>
                       <input
                         {...register("provinceresidence")}
+                        onChange={(e) => {
+                          e.target.value = e.target.value.toUpperCase();
+                        }}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                       />
                       {errors.provinceresidence && (
@@ -741,6 +780,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                       </label>
                       <input
                         {...register("reasonformoving")}
+                        onChange={(e) => {
+                          e.target.value = e.target.value.toUpperCase();
+                        }}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                       />
                       {errors.reasonformoving && (
@@ -780,6 +822,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                 </label>
                 <input
                   {...register("emergencycontactname")}
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
                 {errors.emergencycontactname && (
@@ -838,7 +883,6 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                 )}
               </div>
             </div>
-            {/* Household Members */}
             <div className="border-t pt-4">
               <h2 className="text-xl font-semibold mb-4">Household Members</h2>
               {fields.map((field, index) => {
@@ -1135,6 +1179,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                         {...register(
                           `householdMembers.${index}.occupation` as const
                         )}
+                        onChange={(e) => {
+                          e.target.value = e.target.value.toUpperCase();
+                        }}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                       />
                       {errors.householdMembers?.[index]?.occupation && (
@@ -1199,6 +1246,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                           {...register(
                             `householdMembers.${index}.disabilitytype` as const
                           )}
+                          onChange={(e) => {
+                            e.target.value = e.target.value.toUpperCase();
+                          }}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                         />
                         {errors.householdMembers?.[index]?.disabilitytype && (
@@ -1219,6 +1269,9 @@ export const CencusContentForm: React.FC<CencusProps> = ({
                         {...register(
                           `householdMembers.${index}.existinghealthcondition` as const
                         )}
+                        onChange={(e) => {
+                          e.target.value = e.target.value.toUpperCase();
+                        }}
                         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                       />
                       {errors.householdMembers?.[index]

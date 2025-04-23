@@ -9,11 +9,12 @@ import {
 } from "react-icons/fi";
 import { RiAccountPinBoxFill } from "react-icons/ri";
 import { RiArchiveDrawerLine } from "react-icons/ri";
+import { FaPeopleGroup } from "react-icons/fa6";
 
 export const AdminLayout = () => {
   const { handleLogout } = authHook();
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen ">
       <aside className="fixed inset-y-0 left-0 w-64 bg-white shadow-lg flex flex-col">
         <div className="p-6 border-b">
           <h1 className="text-2xl font-bold text-[#7F265B]">Admin Dashboard</h1>
@@ -23,7 +24,11 @@ export const AdminLayout = () => {
           {[
             { to: "/admin/dashboard", label: "Dashboard", icon: <FiHome /> },
             { to: "/admin/residents", label: "Residents", icon: <FiUsers /> },
-
+            {
+              to: "/admin/demographic",
+              label: "Demographic",
+              icon: <FaPeopleGroup />,
+            },
             {
               to: "/admin/census",
               label: "Census Data",

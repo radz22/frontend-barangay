@@ -204,7 +204,7 @@ const FaceDetector: React.FC<Props> = ({ faces }) => {
         try {
           setFaceMatch(true);
           const response = await axios.get(
-            `https://barangay-api-backend.onrender.com/api/image/${firstName}/${lastName}`
+            `http://localhost:3000/api/image/${firstName}/${lastName}`
           );
 
           if (isMounted) {

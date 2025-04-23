@@ -25,6 +25,7 @@ export const residentSchema = z.object({
   province: z.string().min(1, "Province is required"),
   descriptor: z.array(z.number()).optional(),
   staffaccountcreate: z.string().optional(),
+  createdAt: z.string().optional(),
 });
 
 export type residentType = z.infer<typeof residentSchema>;

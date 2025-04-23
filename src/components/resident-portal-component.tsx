@@ -39,7 +39,7 @@ const ResidentPortalComponent = () => {
         ]);
 
         const { data } = await axios.get(
-          "https://backend-api-5m5k.onrender.com/api/resident/resident"
+          "http://localhost:3000/api/resident/resident"
         );
         setFaces(data);
         setIsLoading(false);

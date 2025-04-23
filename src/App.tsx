@@ -76,6 +76,11 @@ const ResidentFacePortal = lazy(() =>
     default: module.default,
   }))
 );
+const Demographic = lazy(() =>
+  import("./pages/admin/demographic").then((module) => ({
+    default: module.default,
+  }))
+);
 
 function App() {
   return (
@@ -101,6 +106,8 @@ function App() {
               <Route path="/admin/residents" element={<AdminResident />} />
               <Route path="/admin/census" element={<AdminCencus />} />
               <Route path="/admin/settings" element={<AdminSettings />} />
+              <Route path="/admin/demographic" element={<Demographic />} />
+
               <Route path="/admin/archived" element={<AdminArchived />} />
               <Route
                 path="/admin/staff/account"

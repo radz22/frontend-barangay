@@ -6,7 +6,7 @@ const useCookie = () => {
     queryKey: ["cookieData"],
     queryFn: getCookie,
     staleTime: 1000 * 60 * 5,
-    refetchOnMount: true,
+    refetchOnMount: false,
   });
 };
 
