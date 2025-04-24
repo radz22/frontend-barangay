@@ -45,7 +45,6 @@ const FaceDetector: React.FC<Props> = ({ faces }) => {
     loadModels();
   }, []);
 
-  // Start/stop camera
   useEffect(() => {
     let stream: MediaStream | null = null;
 
@@ -78,7 +77,6 @@ const FaceDetector: React.FC<Props> = ({ faces }) => {
     };
   }, [cameraOn, modelsLoaded]);
 
-  // Face detection and recognition
   useEffect(() => {
     let isMounted = true;
 
@@ -190,7 +188,6 @@ const FaceDetector: React.FC<Props> = ({ faces }) => {
     }
   }, [faces, firstName, lastName, modelsLoaded]);
 
-  // Handle recognized user
   useEffect(() => {
     let isMounted = true;
 
@@ -204,7 +201,7 @@ const FaceDetector: React.FC<Props> = ({ faces }) => {
         try {
           setFaceMatch(true);
           const response = await axios.get(
-            `http://localhost:3000/api/image/${firstName}/${lastName}`
+            `https://backend-barangay-production.up.railway.app/api/image/${firstName}/${lastName}`
           );
 
           if (isMounted) {

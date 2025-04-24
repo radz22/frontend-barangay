@@ -105,7 +105,7 @@ const FaceRegister: React.FC<Props> = ({ onRegister, onCancel }) => {
 
     const descriptor = Array.from(detection.descriptor as Float32Array);
     const res = await axios.post(
-      "https://backend-api-5m5k.onrender.com/api/image",
+      "https://backend-barangay-production.up.railway.app/api/image",
       {
         firstName,
         lastName,

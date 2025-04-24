@@ -144,7 +144,6 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
           )}
         </div>
         <div className="space-y-4">
-          {/* Form Inputs for Updating Resident Details */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>

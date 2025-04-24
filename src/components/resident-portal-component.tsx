@@ -27,7 +27,6 @@ export interface Resident {
 const ResidentPortalComponent = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [faces, setFaces] = useState<Resident[]>([]);
-
   useEffect(() => {
     const loadModelsAndFaces = async () => {
       try {
@@ -39,7 +38,7 @@ const ResidentPortalComponent = () => {
         ]);
 
         const { data } = await axios.get(
-          "http://localhost:3000/api/resident/resident"
+          "https://backend-barangay-production.up.railway.app/api/resident/resident"
         );
         setFaces(data);
         setIsLoading(false);

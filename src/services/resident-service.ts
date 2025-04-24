@@ -7,7 +7,7 @@ import {
 export const createResident = async (data: residentType) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/resident",
+      "https://backend-barangay-production.up.railway.app/api/resident",
       data
     );
     return response.data;
@@ -17,7 +17,9 @@ export const createResident = async (data: residentType) => {
 };
 export const getAllResidentData = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/api/resident");
+    const response = await axios.get(
+      "https://backend-barangay-production.up.railway.app/api/resident"
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -26,7 +28,7 @@ export const getAllResidentData = async () => {
 export const getUserResidentDataById = async (id: string | undefined) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/resident/${id}`
+      `https://backend-barangay-production.up.railway.app/api/resident/${id}`
     );
     return response.data;
   } catch (error) {
@@ -37,7 +39,7 @@ export const getUserResidentDataById = async (id: string | undefined) => {
 export const deleteById = async (id: string | null) => {
   try {
     const response = await axios.delete(
-      `http://localhost:3000/api/resident/${id}`
+      `https://backend-barangay-production.up.railway.app/api/resident/${id}`
     );
     return response.data;
   } catch (error) {
@@ -53,7 +55,7 @@ export const registerFace = async ({
 }) => {
   try {
     const response = await axios.put(
-      `http://localhost:3000/api/resident/${id}`,
+      `https://backend-barangay-production.up.railway.app/api/resident/${id}`,
       { descriptor }
     );
     return response.data;
@@ -64,7 +66,7 @@ export const registerFace = async ({
 export const updateResident = async (data: ResidentNew) => {
   try {
     const response = await axios.put(
-      `http://localhost:3000/api/resident/update/resident/${data.id}`,
+      `https://backend-barangay-production.up.railway.app/api/resident/update/resident/${data.id}`,
       {
         firstName: data.firstName,
         lastName: data.lastName,
@@ -89,7 +91,7 @@ export const updateResident = async (data: ResidentNew) => {
 export const updateResidentValidate = async (data: residentUpdate) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/residentupdate`,
+      `https://backend-barangay-production.up.railway.app/api/residentupdate`,
       {
         updateid: data.updateid,
         firstName: data.firstName,
@@ -114,7 +116,7 @@ export const updateResidentValidate = async (data: residentUpdate) => {
 export const getAllUpdateApproval = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:3000/api/residentupdate"
+      "https://backend-barangay-production.up.railway.app/api/residentupdate"
     );
     return response.data;
   } catch (error) {
@@ -130,7 +132,7 @@ export const decline = async ({
 }) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000api/residentupdate/decline",
+      "https://backend-barangay-production.up.railway.app/api/residentupdate/decline",
       {
         reason,
         reasonid,
@@ -145,7 +147,7 @@ export const decline = async ({
 export const getReasonbyResident = async (id: string | undefined) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/residentupdate/${id}`
+      `https://backend-barangay-production.up.railway.app/api/residentupdate/${id}`
     );
     return response.data;
   } catch (error) {
