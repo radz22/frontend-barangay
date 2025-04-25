@@ -1,5 +1,6 @@
 import axios from "axios";
 import { residentType } from "../type/user/resident-profilling-zod";
+import { residentVerify } from "../type/resident-verify-type";
 import {
   residentUpdate,
   ResidentNew,
@@ -7,7 +8,7 @@ import {
 export const createResident = async (data: residentType) => {
   try {
     const response = await axios.post(
-      "https://backend-barangay-production.up.railway.app/api/resident",
+      "http://localhost:3000/api/resident",
       data
     );
     return response.data;
@@ -17,9 +18,7 @@ export const createResident = async (data: residentType) => {
 };
 export const getAllResidentData = async () => {
   try {
-    const response = await axios.get(
-      "https://backend-barangay-production.up.railway.app/api/resident"
-    );
+    const response = await axios.get("http://localhost:3000/api/resident");
     return response.data;
   } catch (error) {
     throw error;
@@ -28,7 +27,7 @@ export const getAllResidentData = async () => {
 export const getUserResidentDataById = async (id: string | undefined) => {
   try {
     const response = await axios.get(
-      `https://backend-barangay-production.up.railway.app/api/resident/${id}`
+      `http://localhost:3000/api/resident/${id}`
     );
     return response.data;
   } catch (error) {
@@ -39,7 +38,7 @@ export const getUserResidentDataById = async (id: string | undefined) => {
 export const deleteById = async (id: string | null) => {
   try {
     const response = await axios.delete(
-      `https://backend-barangay-production.up.railway.app/api/resident/${id}`
+      `http://localhost:3000/api/resident/${id}`
     );
     return response.data;
   } catch (error) {
@@ -55,7 +54,7 @@ export const registerFace = async ({
 }) => {
   try {
     const response = await axios.put(
-      `https://backend-barangay-production.up.railway.app/api/resident/${id}`,
+      `http://localhost:3000/api/resident/${id}`,
       { descriptor }
     );
     return response.data;
@@ -66,12 +65,13 @@ export const registerFace = async ({
 export const updateResident = async (data: ResidentNew) => {
   try {
     const response = await axios.put(
-      `https://backend-barangay-production.up.railway.app/api/resident/update/resident/${data.id}`,
+      `http://localhost:3000/api/resident/update/resident/${data.id}`,
       {
         firstName: data.firstName,
         lastName: data.lastName,
         middlename: data.middlename,
         dateofbirth: data.dateofbirth,
+        age: data.age,
         gender: data.gender,
         civilstatus: data.civilstatus,
         nationality: data.nationality,
@@ -91,13 +91,14 @@ export const updateResident = async (data: ResidentNew) => {
 export const updateResidentValidate = async (data: residentUpdate) => {
   try {
     const response = await axios.post(
-      `https://backend-barangay-production.up.railway.app/api/residentupdate`,
+      `http://localhost:3000/api/residentupdate`,
       {
         updateid: data.updateid,
         firstName: data.firstName,
         lastName: data.lastName,
         middlename: data.middlename,
         dateofbirth: data.dateofbirth,
+        age: data.age,
         gender: data.gender,
         civilstatus: data.civilstatus,
         nationality: data.nationality,
@@ -116,7 +117,7 @@ export const updateResidentValidate = async (data: residentUpdate) => {
 export const getAllUpdateApproval = async () => {
   try {
     const response = await axios.get(
-      "https://backend-barangay-production.up.railway.app/api/residentupdate"
+      "http://localhost:3000/api/residentupdate"
     );
     return response.data;
   } catch (error) {
@@ -126,16 +127,19 @@ export const getAllUpdateApproval = async () => {
 export const decline = async ({
   reason,
   reasonid,
+  cloudinaryid,
 }: {
   reason: string;
   reasonid: string;
+  cloudinaryid: string;
 }) => {
   try {
     const response = await axios.post(
-      "https://backend-barangay-production.up.railway.app/api/residentupdate/decline",
+      "http://localhost:3000/api/residentupdate/decline",
       {
         reason,
         reasonid,
+        cloudinaryid,
       }
     );
     return response.data;
@@ -147,7 +151,19 @@ export const decline = async ({
 export const getReasonbyResident = async (id: string | undefined) => {
   try {
     const response = await axios.get(
-      `https://backend-barangay-production.up.railway.app/api/residentupdate/${id}`
+      `http://localhost:3000/api/residentupdate/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const verifyResident = async (data: residentVerify) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/api/image/verify",
+      data
     );
     return response.data;
   } catch (error) {

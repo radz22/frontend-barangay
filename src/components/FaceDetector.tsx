@@ -3,7 +3,7 @@ import * as faceapi from "face-api.js";
 import axios from "axios";
 import { Resident } from "./resident-portal-component";
 import FaceVerifiedDetails from "./face-verified-details";
-
+import SkeletonLoader from "./loading/loading-screen";
 interface Props {
   faces: Resident[];
 }
@@ -14,7 +14,7 @@ const FaceDetector: React.FC<Props> = ({ faces }) => {
   const firstName = localStorage.getItem("firstName") || "";
   const lastName = localStorage.getItem("lastName") || "";
 
-  const [recognizedUser, setRecognizedUser] = useState<{
+  const [_, setRecognizedUser] = useState<{
     firstName: string;
     lastName: string;
   } | null>(null);
@@ -132,7 +132,6 @@ const FaceDetector: React.FC<Props> = ({ faces }) => {
 
         const matcher = new faceapi.FaceMatcher(labeledDescriptors, 0.6);
         const results = resized.map((d) => matcher.findBestMatch(d.descriptor));
-
         let foundMatch = false;
         results.forEach((result, i) => {
           const box = resized[i].detection.box;
@@ -149,13 +148,11 @@ const FaceDetector: React.FC<Props> = ({ faces }) => {
 
           if (isExpectedUser) {
             foundMatch = true;
-            const [firstName, lastName] = result.label.split(" ");
-            setRecognizedUser({ firstName, lastName });
+            verifyAndFetchDetails();
           }
         });
 
         if (!foundMatch) {
-          setRecognizedUser(null);
           setDetectionStatus("No matching face found");
         }
       } catch (error) {
@@ -188,51 +185,33 @@ const FaceDetector: React.FC<Props> = ({ faces }) => {
     }
   }, [faces, firstName, lastName, modelsLoaded]);
 
-  useEffect(() => {
-    let isMounted = true;
+  const verifyAndFetchDetails = async () => {
+    try {
+      setFaceMatch(true);
 
-    const verifyAndFetchDetails = async () => {
-      if (!isMounted) return;
+      const response = await axios.get(
+        `http://localhost:3000/api/image/${firstName}/${lastName}`
+      );
 
-      if (
-        recognizedUser?.firstName === firstName &&
-        recognizedUser?.lastName === lastName
-      ) {
-        try {
-          setFaceMatch(true);
-          const response = await axios.get(
-            `https://backend-barangay-production.up.railway.app/api/image/${firstName}/${lastName}`
-          );
+      setResidentDetails(response.data);
 
-          if (isMounted) {
-            setResidentDetails(response.data);
-
-            // Stop camera stream
-            if (videoRef.current?.srcObject) {
-              const stream = videoRef.current.srcObject as MediaStream;
-              stream.getTracks().forEach((track) => track.stop());
-              videoRef.current.srcObject = null;
-            }
-
-            setCameraOn(false);
-          }
-        } catch (error) {
-          if (isMounted) {
-            setCameraOn(true); // Keep camera on if fetch fails
-          }
-        }
-      } else if (isMounted) {
-        setFaceMatch(false);
+      if (videoRef.current?.srcObject) {
+        const stream = videoRef.current.srcObject as MediaStream;
+        stream.getTracks().forEach((track) => track.stop());
+        videoRef.current.srcObject = null;
       }
-    };
 
-    verifyAndFetchDetails();
+      setCameraOn(false);
+    } catch (error) {
+      setFaceMatch(false);
+      setCameraOn(true);
+    }
+  };
 
-    return () => {
-      isMounted = false;
-    };
-  }, [recognizedUser, firstName, lastName]);
-
+  const handleCancel = () => {
+    setCameraOn(true);
+    setFaceMatch(false);
+  };
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       {faceMatch ? (
@@ -241,9 +220,12 @@ const FaceDetector: React.FC<Props> = ({ faces }) => {
             Identity Verified
           </h2>
           {residentDetails ? (
-            <FaceVerifiedDetails residentDetails={residentDetails} />
+            <FaceVerifiedDetails
+              residentDetails={residentDetails}
+              handleCancel={handleCancel}
+            />
           ) : (
-            <p className="text-gray-600">Loading resident details...</p>
+            <SkeletonLoader />
           )}
         </div>
       ) : cameraOn ? (
@@ -267,14 +249,7 @@ const FaceDetector: React.FC<Props> = ({ faces }) => {
           </div>
 
           <div className="text-center">
-            {recognizedUser ? (
-              <p className="text-yellow-600 font-medium">
-                Recognized: {recognizedUser.firstName} {recognizedUser.lastName}
-                (not the expected user)
-              </p>
-            ) : (
-              <p className="text-gray-600">{detectionStatus}</p>
-            )}
+            <p className="text-gray-600">{detectionStatus}</p>
           </div>
         </div>
       ) : (
@@ -300,5 +275,4 @@ const FaceDetector: React.FC<Props> = ({ faces }) => {
     </div>
   );
 };
-
 export default FaceDetector;

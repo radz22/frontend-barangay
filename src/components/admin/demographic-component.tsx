@@ -42,7 +42,7 @@ const DemographicComponent = () => {
     datasets: [
       {
         label: "Age Distribution",
-        data: [25, 75],
+        data: [counts.populationbelow18, counts.populationunder18],
         backgroundColor: ["rgba(54, 162, 235, 0.7)", "rgba(255, 99, 132, 0.7)"],
         borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 99, 132, 1)"],
         borderWidth: 1,
@@ -53,7 +53,7 @@ const DemographicComponent = () => {
     labels: ["2025", "2026", "2027", "2028", "2029", "2030"],
     datasets: [
       {
-        label: "Population Projection (in thousands)",
+        label: "Population Projection",
         data: [
           counts.populationGet2025,
           counts.populationGet2026,
@@ -194,8 +194,10 @@ const DemographicComponent = () => {
         </div>
         <div className="bg-green-50 p-4 rounded-lg shadow">
           <h3 className="text-lg font-semibold text-green-800">Median Age</h3>
-          <p className="text-2xl font-bold text-green-600">32.5</p>
-          <p className="text-sm text-green-500">Years</p>
+          <p className="text-2xl font-bold text-green-600">
+            {counts.medianAge}
+          </p>
+          <p className="text-sm text-green-500">Years Old</p>
         </div>
         <div className="bg-purple-50 p-4 rounded-lg shadow">
           <h3 className="text-lg font-semibold text-purple-800">
@@ -215,10 +217,6 @@ const DemographicComponent = () => {
             <div className="h-96">
               <Bar options={ageOptions} data={ageData} />
             </div>
-            <div className="mt-4 text-gray-600">
-              <p>• 25% of the population is under 18 years old</p>
-              <p>• 75% of the population is 18 years or older</p>
-            </div>
           </div>
         )}
 
@@ -230,10 +228,6 @@ const DemographicComponent = () => {
             <div className="h-96 w-full">
               <Line options={populationOptions} data={populationData} />
             </div>
-            <div className="mt-4 text-gray-600">
-              <p>• Expected annual growth rate: ~4.2%</p>
-              <p>• Projected to reach 1.45 million by 2030</p>
-            </div>
           </div>
         )}
 
@@ -244,10 +238,6 @@ const DemographicComponent = () => {
             </h2>
             <div className="h-96">
               <Bar options={genderOptions} data={genderData} />
-            </div>
-            <div className="mt-4 text-gray-600">
-              <p>• Female population slightly higher at 52%</p>
-              <p>• Male population accounts for 48%</p>
             </div>
           </div>
         )}

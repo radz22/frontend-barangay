@@ -49,8 +49,8 @@ const authHook = () => {
   const logoutMutation = useMutation({
     mutationFn: logoutService,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["userauth"] }); // ✅ Clear userauth data
-      await queryClient.refetchQueries({ queryKey: ["userauth"] }); // ✅ Ensure data is refreshed
+      await queryClient.invalidateQueries({ queryKey: ["userauth"] });
+      await queryClient.refetchQueries({ queryKey: ["userauth"] });
       navigate("/", { replace: true });
     },
     onError: (error: any) => {

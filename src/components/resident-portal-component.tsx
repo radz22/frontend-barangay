@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import * as faceapi from "face-api.js";
 import axios from "axios";
 import FaceDetector from "../components/FaceDetector";
+import SkeletonLoader from "./loading/loading-screen";
+import { Link } from "react-router-dom";
 export interface Resident {
   _id?: string;
   staffaccountcreate?: string;
@@ -16,6 +18,7 @@ export interface Resident {
   nationality?: string;
   mobilenumber?: number;
   address?: string;
+  age: number;
   streetname?: string;
   province?: string;
   isUpdated?: boolean;
@@ -38,7 +41,7 @@ const ResidentPortalComponent = () => {
         ]);
 
         const { data } = await axios.get(
-          "https://backend-barangay-production.up.railway.app/api/resident/resident"
+          "http://localhost:3000/api/resident/resident"
         );
         setFaces(data);
         setIsLoading(false);
@@ -52,8 +55,27 @@ const ResidentPortalComponent = () => {
 
   return (
     <div style={{ padding: 20 }}>
-      <h1>Face Recognition System</h1>
-      {isLoading ? <p>Loading models...</p> : <FaceDetector faces={faces} />}
+      <div>
+        <Link to="/page/resident-portal">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={30}
+            height={30}
+            viewBox="0 0 48 48"
+          >
+            <path
+              fill="#797979"
+              fillRule="evenodd"
+              stroke="#797979"
+              strokeLinejoin="round"
+              strokeWidth={4}
+              d="M44 40.836q-7.34-8.96-13.036-10.168t-10.846-.365V41L4 23.545L20.118 7v10.167q9.523.075 16.192 6.833q6.668 6.758 7.69 16.836Z"
+              clipRule="evenodd"
+            ></path>
+          </svg>
+        </Link>
+      </div>
+      {isLoading ? <SkeletonLoader /> : <FaceDetector faces={faces} />}
     </div>
   );
 };

@@ -13,7 +13,7 @@ export const residentSchema = z.object({
       return !isNaN(Date.parse(date));
     }, "Invalid date format"),
   gender: z.enum(["female", "male"]),
-
+  age: z.number().optional(),
   civilstatus: z.enum(["single", "married", "widowed", "seperated"], {
     required_error: "Civil status is required",
   }),
@@ -37,6 +37,7 @@ export interface residentUpdate {
   middlename: string | undefined;
   dateofbirth: string;
   gender: string;
+  age: number;
   civilstatus: string | undefined;
   nationality: string | undefined;
   mobilenumber: number | undefined;
@@ -51,9 +52,10 @@ export type residentApprovalData = {
   firstName: string;
   middlename: string;
   lastName: string;
-  dateofbirth: string; // ISO date string: "YYYY-MM-DD"
-  gender: "male" | "female" | "other"; // You can adjust if needed
-  civilstatus: "single" | "married" | "divorced" | "widowed"; // Add other statuses as needed
+  dateofbirth: string;
+  age: number;
+  gender: "male" | "female" | "other";
+  civilstatus: "single" | "married" | "divorced" | "widowed";
   mobilenumber: string | null;
   nationality: string;
   address: string;
@@ -61,8 +63,8 @@ export type residentApprovalData = {
   cloudinaryphoto: string;
   cloudinaryid: string;
   streetname: string;
-  createdAt: string; // ISO timestamp
-  updatedAt: string; // ISO timestamp
+  createdAt: string;
+  updatedAt: string;
   __v: number;
 };
 
@@ -73,6 +75,7 @@ export type ResidentNew = {
   lastName: string;
   dateofbirth: string;
   gender: string;
+  age: number;
   civilstatus: string;
   mobilenumber: string | null;
   nationality: string;

@@ -32,6 +32,7 @@ const ViewApprovalResident: React.FC<ViewProps> = ({ data }) => {
       lastName: data.lastName,
       middlename: data.middlename,
       dateofbirth: data.dateofbirth,
+      age: data.age,
       gender: data.gender,
       civilstatus: data.civilstatus,
       nationality: data.nationality,
@@ -46,7 +47,7 @@ const ViewApprovalResident: React.FC<ViewProps> = ({ data }) => {
   };
 
   const handleDeclineResident = () => {
-    handleDecline(declineReason, selectId);
+    handleDecline(declineReason, selectId, data.cloudinaryid);
   };
   return (
     <div className="p-6 space-y-10 bg-white rounded-lg shadow-md w-full max-w-5xl mx-auto">
@@ -61,6 +62,7 @@ const ViewApprovalResident: React.FC<ViewProps> = ({ data }) => {
             { label: "Last Name", value: data.lastName },
             { label: "Gender", value: data.gender },
             { label: "Birthday", value: data.dateofbirth },
+            { label: "Age", value: data.age },
             { label: "Mobile", value: data.mobilenumber },
             { label: "Civil Status", value: data.civilstatus },
             { label: "Nationality", value: data.nationality },
@@ -102,7 +104,6 @@ const ViewApprovalResident: React.FC<ViewProps> = ({ data }) => {
         )}
       </div>
 
-      {/* Actions */}
       <div className="flex justify-center gap-10 pt-6">
         <button
           className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg shadow transition-all duration-150"
@@ -131,7 +132,7 @@ const ViewApprovalResident: React.FC<ViewProps> = ({ data }) => {
                 </h3>
                 <textarea
                   className="w-full p-4 border border-gray-300 rounded-lg"
-                  placeholder="Enter Decline Reason"
+                  placeholder="Enter Reason"
                   value={declineReason}
                   onChange={(e) => setDeclineReason(e.target.value)}
                 ></textarea>
@@ -141,7 +142,7 @@ const ViewApprovalResident: React.FC<ViewProps> = ({ data }) => {
                   onClick={handleDeclineResident}
                   disabled={declineMutation.isPending}
                 >
-                  {declineMutation.isPending ? "Loading..." : "Decline"}
+                  {declineMutation.isPending ? "Loading..." : "Submit"}
                 </button>
               </div>
               <div className="absolute top-[-20px] right-[-20px]">

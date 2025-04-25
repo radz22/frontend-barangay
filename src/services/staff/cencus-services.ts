@@ -3,7 +3,7 @@ import { cencusType } from "../../type/user/cencus-zod";
 
 export const createCencus = async (data: cencusType) => {
   try {
-    const response = await axios.post("https://backend-barangay-production.up.railway.app/api/cencus", data);
+    const response = await axios.post("http://localhost:3000/api/cencus", data);
     return response.data;
   } catch (error) {
     throw error;
@@ -12,7 +12,7 @@ export const createCencus = async (data: cencusType) => {
 
 export const getAllData = async () => {
   try {
-    const response = await axios.get("https://backend-barangay-production.up.railway.app/api/cencus");
+    const response = await axios.get("http://localhost:3000/api/cencus");
     return response.data;
   } catch (error) {
     throw error;
@@ -22,7 +22,7 @@ export const getAllData = async () => {
 export const getUserCencusData = async (emaillaccount: string | undefined) => {
   try {
     const response = await axios.get(
-      `https://backend-barangay-production.up.railway.app/api/cencus/${emaillaccount}`
+      `http://localhost:3000/api/cencus/${emaillaccount}`
     );
     return response.data;
   } catch (error) {
@@ -32,7 +32,7 @@ export const getUserCencusData = async (emaillaccount: string | undefined) => {
 export const getUserCencusDataById = async (id: string | undefined) => {
   try {
     const response = await axios.get(
-      `https://backend-barangay-production.up.railway.app/api/cencus/user/${id}`
+      `http://localhost:3000/api/cencus/user/${id}`
     );
     return response.data;
   } catch (error) {
@@ -43,7 +43,7 @@ export const getUserCencusDataById = async (id: string | undefined) => {
 export const deleteById = async (id: string | null | undefined) => {
   try {
     const response = await axios.delete(
-      `https://backend-barangay-production.up.railway.app/api/cencus/${id}`
+      `http://localhost:3000/api/cencus/${id}`
     );
     return response.data;
   } catch (error) {
@@ -54,7 +54,7 @@ export const deleteById = async (id: string | null | undefined) => {
 export const deleteArchiveCencusbyId = async (id: string | null) => {
   try {
     const response = await axios.delete(
-      `https://backend-barangay-production.up.railway.app/api/cencus/archive/${id}`
+      `http://localhost:3000/api/cencus/archive/${id}`
     );
     return response.data;
   } catch (error) {
@@ -64,7 +64,7 @@ export const deleteArchiveCencusbyId = async (id: string | null) => {
 export const restoredCencusbyId = async (id: string | null | undefined) => {
   try {
     const response = await axios.post(
-      "https://backend-barangay-production.up.railway.app/api/cencus/restore",
+      "http://localhost:3000/api/cencus/restore",
       {
         id: id,
       }

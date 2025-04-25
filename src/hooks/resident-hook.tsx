@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { reasonDataType } from "../type/reason-type";
+import { useNavigate } from "react-router-dom";
+import { residentVerify } from "../type/resident-verify-type";
 import {
   residentUpdate,
   ResidentNew,
@@ -19,13 +21,14 @@ import {
   updateResidentValidate,
   decline,
   getReasonbyResident,
+  verifyResident,
 } from "../services/resident-service";
 import { residentType } from "../type/user/resident-profilling-zod";
 const ResidentHook = () => {
   const queryClient = useQueryClient();
   const [_, setResidentDataUser] = useState<residentType>();
   const [reasonData, setReasonData] = useState<reasonDataType>();
-
+  const navigate = useNavigate();
   const createResidentMutation = useMutation({
     mutationFn: createResident,
     onSuccess: () => {
@@ -46,7 +49,21 @@ const ResidentHook = () => {
       handleErrorAlert(error.response.data.error);
     },
   });
-
+  const verifyResidentMutation = useMutation({
+    mutationFn: verifyResident,
+    onSuccess: (data) => {
+      handleSuccessAlert("Verified Resident");
+      localStorage.setItem("firstName", data.firstName);
+      localStorage.setItem("lastName", data.lastName);
+      setTimeout(() => {
+        navigate("/page/face-portal");
+      }, 2000);
+      queryClient.invalidateQueries({ queryKey: ["updateresident"] });
+    },
+    onError: (error: any) => {
+      handleErrorAlert(error.response.data.error);
+    },
+  });
   const getResidenttDataByIdMutation = useMutation({
     mutationFn: getUserResidentDataById,
     onSuccess: (data) => {
@@ -108,7 +125,6 @@ const ResidentHook = () => {
       handleErrorAlert(error.response.data.error);
     },
   });
-  //function
   const handleCreateResident = (data: residentType) => {
     createResidentMutation.mutate(data);
   };
@@ -136,8 +152,15 @@ const ResidentHook = () => {
     getReasonMutation.mutate(id);
   };
 
-  const handleDecline = (reason: string, reasonid: string) => {
-    declineMutation.mutate({ reason, reasonid });
+  const handleDecline = (
+    reason: string,
+    reasonid: string,
+    cloudinaryid: string
+  ) => {
+    declineMutation.mutate({ reason, reasonid, cloudinaryid });
+  };
+  const handleVerifyResident = (data: residentVerify) => {
+    verifyResidentMutation.mutate(data);
   };
   return {
     handleCreateResident,
@@ -155,6 +178,8 @@ const ResidentHook = () => {
     reasonData,
     handleDecline,
     declineMutation,
+    handleVerifyResident,
+    verifyResidentMutation,
   };
 };
 

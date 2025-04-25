@@ -108,7 +108,10 @@ function App() {
               <Route path="/admin/settings" element={<AdminSettings />} />
               <Route path="/admin/demographic" element={<Demographic />} />
 
-              <Route path="/admin/archived" element={<AdminArchived />} />
+              <Route
+                path="/admin/archived/census"
+                element={<AdminArchived />}
+              />
               <Route
                 path="/admin/staff/account"
                 element={<CreateStaffAccount />}

@@ -27,6 +27,9 @@ type CountResult = {
   populationGet2029: number;
   populationGet2030: number;
   populationThisYear: number;
+  populationunder18: number;
+  populationbelow18: number;
+  medianAge: number;
 } & EducationCounts;
 
 const Count = (): CountResult => {
@@ -50,6 +53,9 @@ const Count = (): CountResult => {
       populationGet2029: 0,
       populationGet2030: 0,
       populationThisYear: 0,
+      populationunder18: 0,
+      populationbelow18: 0,
+      medianAge: 0,
     };
 
     if (!cencusData || !residentData) {
@@ -125,7 +131,30 @@ const Count = (): CountResult => {
         return createdDate.getFullYear() === currentYear;
       }
     ).length;
+    const populationunder18 = residentData.data.filter(
+      (resident: residentType) => {
+        if (!resident.age) return false;
+        return resident.age >= 18;
+      }
+    ).length;
+    const populationbelow18 = residentData.data.filter(
+      (resident: residentType) => {
+        if (!resident.age) return false;
+        return resident.age < 18;
+      }
+    ).length;
+    const ages: number[] = residentData.data
+      .filter((resident: residentType) => typeof resident.age === "number")
+      .map((resident: residentType) => resident.age as number)
+      .sort((a: number, b: number) => a - b);
 
+    const medianAge: number = (() => {
+      if (ages.length === 0) return 0;
+      const mid: number = Math.floor(ages.length / 2);
+      return ages.length % 2 === 0
+        ? (ages[mid - 1] + ages[mid]) / 2
+        : ages[mid];
+    })();
     const countEducation = (items: cencusType[]): EducationCounts => {
       return items.reduce(
         (acc: EducationCounts, item: cencusType) => {
@@ -170,6 +199,9 @@ const Count = (): CountResult => {
     const membersEducation = countEducation(allHouseholdMembers);
 
     return {
+      medianAge,
+      populationbelow18,
+      populationunder18,
       populationThisYear,
       populationGet2025,
       populationGet2026,

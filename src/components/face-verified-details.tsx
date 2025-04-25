@@ -5,15 +5,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useEffect } from "react";
 import ResidentHook from "../hooks/resident-hook";
-import { Link } from "react-router-dom";
 import { residentUpdate } from "../type/user/resident-profilling-zod";
+import { calculateAge } from "../utils/calculateAge";
 const residentSchema = z.object({
   id: z.string().optional(),
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   middlename: z.string().optional(),
   dateofbirth: z.string(),
-
+  age: z.number().min(1, "Age is Required"),
   gender: z.enum(["female", "male", "other"]),
   civilstatus: z.enum(["single", "married", "widowed", "separated"], {
     required_error: "Civil status is required",
@@ -30,10 +30,12 @@ export type ResidentFormData = z.infer<typeof residentSchema>;
 
 interface FaceVerifiedDetailsProps {
   residentDetails: Resident | null;
+  handleCancel: () => void;
 }
 
 const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
   residentDetails,
+  handleCancel,
 }) => {
   const [preview, setPreview] = useState<null | string>(null);
 
@@ -48,10 +50,12 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
     handleSubmit,
     setValue,
     reset,
+    watch,
     formState: { errors },
   } = useForm<ResidentFormData>({
     resolver: zodResolver(residentSchema),
   });
+  const selectedDate = watch("dateofbirth");
 
   useEffect(() => {
     if (residentDetails) {
@@ -74,12 +78,18 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
         mobilenumber: residentDetails?.mobilenumber?.toString()
           ? residentDetails?.mobilenumber?.toString()
           : "",
+        age: residentDetails.age,
       });
 
       handleGetReason(residentDetails._id);
     }
   }, [residentDetails, reset]);
-
+  useEffect(() => {
+    if (selectedDate) {
+      const age = calculateAge(selectedDate);
+      setValue("age", age, { shouldValidate: true });
+    }
+  }, [selectedDate, setValue]);
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -113,6 +123,7 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
       lastName: data.lastName,
       middlename: data.middlename || undefined,
       dateofbirth: data.dateofbirth,
+      age: data.age,
       gender: data.gender,
       civilstatus: data.civilstatus,
       nationality: data.nationality,
@@ -158,6 +169,9 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
                   type="text"
                   id="firstName"
                   className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                 />
                 {errors.firstName && (
                   <span className="text-red-500 text-sm">
@@ -178,6 +192,9 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
                   type="text"
                   id="lastName"
                   className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                 />
                 {errors.lastName && (
                   <span className="text-red-500 text-sm">
@@ -195,13 +212,15 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
                 </label>
                 <input
                   {...register("middlename")}
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                   type="text"
                   id="middlename"
                   className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
                 />
               </div>
 
-              {/* Date of Birth */}
               <div>
                 <label
                   htmlFor="dateofbirth"
@@ -221,8 +240,21 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
                   </span>
                 )}
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Age
+                </label>
+                <input
+                  type="number"
+                  {...register("age", { valueAsNumber: true })}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                  readOnly
+                />
+                {errors.age && (
+                  <p className="text-red-500 text-sm">{errors.age.message}</p>
+                )}
+              </div>
 
-              {/* Gender */}
               <div>
                 <label
                   htmlFor="gender"
@@ -245,7 +277,6 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
                 )}
               </div>
 
-              {/* Civil Status */}
               <div>
                 <label
                   htmlFor="civilstatus"
@@ -270,7 +301,6 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
                 )}
               </div>
 
-              {/* Other Optional Fields */}
               <div>
                 <label
                   htmlFor="nationality"
@@ -280,6 +310,9 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
                 </label>
                 <input
                   {...register("nationality")}
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                   type="text"
                   id="nationality"
                   className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
@@ -297,6 +330,9 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
                   type="text"
                   id="address"
                   className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                 />
               </div>
               <div>
@@ -311,6 +347,9 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
                   type="text"
                   id="streetname"
                   className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                 />
               </div>
               <div>
@@ -325,6 +364,9 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
                   type="text"
                   id="province"
                   className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
                 />
               </div>
               <div>
@@ -375,14 +417,14 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
               )}
             </div>
             <div className="flex justify-end space-x-4">
-              <Link to="/page/resident-portal">
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md"
-                >
-                  Cancel
-                </button>
-              </Link>
+              <button
+                type="button"
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md"
+                onClick={handleCancel}
+              >
+                Cancel
+              </button>
+
               <button
                 type="submit"
                 disabled={createUpdateResident.isPending}

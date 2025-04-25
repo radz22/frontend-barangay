@@ -19,13 +19,11 @@ export const CencusContentForm: React.FC<CencusProps> = ({
 }) => {
   const { handleCreateCencus, createCencusMutation } = CencusHook();
   const { handleLogout } = authHook();
-  // Refs and state
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [show, setShow] = useState(false);
   const [streaming, setStreaming] = useState(false);
   const [angleMessage, setAngleMessage] = useState("");
-  // Form setup
   const {
     register,
     control,
@@ -46,7 +44,6 @@ export const CencusContentForm: React.FC<CencusProps> = ({
     name: "householdMembers",
   });
 
-  // Watched values
   const selectedDate = watch("birthday");
   const disAbilityStatus = watch("disabilitystatus");
   const residentLived = watch("residentlived");
@@ -185,7 +182,6 @@ export const CencusContentForm: React.FC<CencusProps> = ({
 
       const descriptor = Array.from(detection.descriptor as Float32Array);
 
-      // Submit the form data
       setValue("descriptor", descriptor, { shouldValidate: true });
       setValue("staffaccountcreate", cookieEmail, { shouldValidate: true });
       const updatedData = getValues();
