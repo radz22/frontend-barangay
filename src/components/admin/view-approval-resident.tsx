@@ -35,12 +35,22 @@ const ViewApprovalResident: React.FC<ViewProps> = ({ data }) => {
       age: data.age,
       gender: data.gender,
       civilstatus: data.civilstatus,
-      nationality: data.nationality,
       mobilenumber: data.mobilenumber,
-      address: data.address,
       streetname: data.streetname,
       province: data.province,
       cloudinaryid: data.cloudinaryid,
+
+      citizenship: data.citizenship,
+      city: data.city,
+      currentschoolenrollment: data.currentschoolenrollment,
+      educationalattainment: data.educationalattainment,
+      emailadress: data.emailadress,
+      emergencycontactname: data.emergencycontactname,
+      emergencycontactnumber: Number(data.emergencycontactnumber),
+      employmentstatus: data.employmentstatus,
+      placeofbirth: data.placeofbirth,
+      relationshiptoemergencycontact: data.relationshiptoemergencycontact,
+      schooltype: data.schooltype,
     };
 
     handleUpdateResident(datas);
@@ -65,10 +75,34 @@ const ViewApprovalResident: React.FC<ViewProps> = ({ data }) => {
             { label: "Age", value: data.age },
             { label: "Mobile", value: data.mobilenumber },
             { label: "Civil Status", value: data.civilstatus },
-            { label: "Nationality", value: data.nationality },
-            { label: "Address", value: data.address },
             { label: "Street Name", value: data.streetname },
             { label: "Province", value: data.province },
+            { label: "Citizen Ship", value: data.citizenship },
+            { label: "City", value: data.city },
+            {
+              label: "Current School Enrollment",
+              value: data.currentschoolenrollment,
+            },
+            {
+              label: "Educational Attainment",
+              value: data.educationalattainment,
+            },
+            { label: "Email Address", value: data.emailadress },
+            {
+              label: "Emergency Contact Name",
+              value: data.emergencycontactname,
+            },
+            {
+              label: "Emergency Contact Number",
+              value: data.emergencycontactnumber,
+            },
+            { label: "Employment Status", value: data.employmentstatus },
+            { label: "Place of Birth", value: data.placeofbirth },
+            {
+              label: "Relationship to Emergency Contact",
+              value: data.relationshiptoemergencycontact,
+            },
+            { label: "School Type", value: data.schooltype },
           ].map((item, idx) => (
             <div
               key={idx}

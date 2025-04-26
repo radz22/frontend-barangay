@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "../../assets/Barangay logo.png";
+import logo from "../../assets/barangay-logo.png";
 import { useState } from "react";
 import OptionCard from "./option-card";
 import userHook from "../../hooks/user/user-hook";
@@ -19,10 +19,8 @@ export const Header = () => {
           <img src={logo} className="w-full h-full" />
         </div>
         <div>
-          <h1 className="text-xl font-semibold text-[#7F265B]">
-            BARANGAY CALOOCAN
-          </h1>
-          <p className="text-xs font-semibold text-[#595959]">Caloocan City</p>
+          <h1 className="text-xl font-semibold text-[#7F265B]">STA. MONICA</h1>
+          <p className="text-xs font-semibold text-[#595959]">QUEZON CITY</p>
         </div>
       </div>
       <div className="flex items-center gap-6">

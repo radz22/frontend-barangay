@@ -1,15 +1,18 @@
 import { useMemo } from "react";
 import { useCencusData } from "../hooks/staff/use-cencus-data";
 import { useResidentData } from "../hooks/use-resident-data";
-import { cencusType } from "../type/user/cencus-zod";
 import { residentType } from "../type/user/resident-profilling-zod";
 
-type EducationCounts = {
-  elementary: { grad: number; underGrad: number };
-  highSchool: { grad: number; underGrad: number };
-  seniorHighSchool: { grad: number; underGrad: number };
-  college: { grad: number; underGrad: number };
-};
+interface EducationCounts {
+  noEducation: number;
+  preschool: number;
+  kindergarten: number;
+  k12: number;
+  oldCurriculum: number;
+  higherEducation: number;
+  collegeGraduate: number;
+  postGraduate: number;
+}
 
 type GenderCounts = {
   male: number;
@@ -30,6 +33,12 @@ type CountResult = {
   populationunder18: number;
   populationbelow18: number;
   medianAge: number;
+
+  employed: number;
+  unemployed: number;
+  selfEmployed: number;
+  student: number;
+  retired: number;
 } & EducationCounts;
 
 const Count = (): CountResult => {
@@ -39,12 +48,26 @@ const Count = (): CountResult => {
 
   return useMemo(() => {
     const result: CountResult = {
+      //education
+      noEducation: 0,
+      preschool: 0,
+      kindergarten: 0,
+      k12: 0,
+      oldCurriculum: 0,
+      higherEducation: 0,
+      collegeGraduate: 0,
+      postGraduate: 0,
+
+      //employment
+      employed: 0,
+      unemployed: 0,
+      selfEmployed: 0,
+      student: 0,
+      retired: 0,
+
+      //
       totalOfMale: 0,
       totalOfFemale: 0,
-      elementary: { grad: 0, underGrad: 0 },
-      highSchool: { grad: 0, underGrad: 0 },
-      seniorHighSchool: { grad: 0, underGrad: 0 },
-      college: { grad: 0, underGrad: 0 },
       populationtotal: 0,
       populationGet2025: 0,
       populationGet2026: 0,
@@ -71,9 +94,6 @@ const Count = (): CountResult => {
       { male: 0, female: 0 }
     );
 
-    const allHouseholdMembers = cencusData.data.flatMap(
-      (item: cencusType) => item.householdMembers || []
-    );
     const populationGet2025 = residentData.data.filter(
       (resident: residentType) => {
         if (!resident.createdAt) return false;
@@ -155,50 +175,134 @@ const Count = (): CountResult => {
         ? (ages[mid - 1] + ages[mid]) / 2
         : ages[mid];
     })();
-    const countEducation = (items: cencusType[]): EducationCounts => {
-      return items.reduce(
-        (acc: EducationCounts, item: cencusType) => {
-          const attainment = item.educationalattainment;
 
-          // Elementary
-          if (attainment === "elementary graduate") acc.elementary.grad++;
-          if (attainment === "elementary undergraduate")
-            acc.elementary.underGrad++;
+    const noEducation = residentData.data.filter((resident: residentType) => {
+      if (!resident.educationalattainment) return false;
+      return resident.educationalattainment == "NO GRADE COMPLETED";
+    }).length;
 
-          // High School
-          if (attainment === "high school graduate") acc.highSchool.grad++;
-          if (attainment === "high school undergraduate")
-            acc.highSchool.underGrad++;
+    const preschool = residentData.data.filter((resident: residentType) => {
+      if (!resident.educationalattainment) return false;
+      return resident.educationalattainment == "PRESCHOOL";
+    }).length;
 
-          // Senior High School
-          if (
-            attainment === "senior high school graduate - TVL" ||
-            attainment === "senior high school graduate - HUMSS" ||
-            attainment === "senior high school graduate - STEM"
-          )
-            acc.seniorHighSchool.grad++;
-          if (attainment === "senior high school undergraduate")
-            acc.seniorHighSchool.underGrad++;
+    const kindergarten = residentData.data.filter((resident: residentType) => {
+      if (!resident.educationalattainment) return false;
+      return resident.educationalattainment == "KINDERGARTEN";
+    }).length;
 
-          // College
-          if (attainment === "college graduate") acc.college.grad++;
-          if (attainment === "college undergraduate") acc.college.underGrad++;
+    const k12 = residentData.data.filter((resident: residentType) => {
+      if (!resident.educationalattainment) return false;
 
-          return acc;
-        },
-        {
-          elementary: { grad: 0, underGrad: 0 },
-          highSchool: { grad: 0, underGrad: 0 },
-          seniorHighSchool: { grad: 0, underGrad: 0 },
-          college: { grad: 0, underGrad: 0 },
-        }
-      );
-    };
+      return [
+        "GRADE 1 (K TO 12)",
+        "GRADE 2 (K TO 12)",
+        "GRADE 3 (K TO 12)",
+        "GRADE 4 (K TO 12)",
+        "GRADE 5 (K TO 12)",
+        "GRADE 6 (K TO 12)",
+        "GRADE 7 (K TO 12)",
+        "GRADE 8 (K TO 12)",
+        "GRADE 9 (K TO 12)",
+        "GRADE 10 (K TO 12)",
+        "GRADE 11 (K TO 12)",
+        "GRADE 12 (K TO 12)",
+      ].includes(resident.educationalattainment);
+    }).length;
 
-    const headsEducation = countEducation(cencusData.data);
-    const membersEducation = countEducation(allHouseholdMembers);
+    const oldCurriculum = residentData.data.filter((resident: residentType) => {
+      if (!resident.educationalattainment) return false;
+
+      return [
+        "GRADE 1 (OLD CURRICULUM)",
+        "GRADE 2 (OLD CURRICULUM)",
+        "GRADE 3 (OLD CURRICULUM)",
+        "GRADE 4 (OLD CURRICULUM)",
+        "GRADE 5 (OLD CURRICULUM)",
+        "GRADE 6 (OLD CURRICULUM)",
+        "GRADE 6 GRADUATE (OLD CURRICULUM)",
+        "GRADE 7 GRADUATE (OLD CURRICULUM)",
+        "1ST YEAR HIGH SCHOOL (OLD CURRICULUM)",
+        "2ND YEAR HIGH SCHOOL (OLD CURRICULUM)",
+        "3RD YEAR HIGH SCHOOL (OLD CURRICULUM)",
+        "4TH YEAR HIGH SCHOOL (OLD CURRICULUM)",
+        "HIGH SCHOOL GRADUATE (OLD CURRICULUM)",
+      ].includes(resident.educationalattainment);
+    }).length;
+
+    const higherEducation = residentData.data.filter(
+      (resident: residentType) => {
+        if (!resident.educationalattainment) return false;
+
+        return [
+          "1ST YEAR COLLEGE",
+          "2ND YEAR COLLEGE",
+          "3RD YEAR COLLEGE",
+          "4TH YEAR COLLEGE",
+          "COLLEGE GRADUATE",
+          "POSTGRADUATE STUDIES",
+        ].includes(resident.educationalattainment);
+      }
+    ).length;
+    const collegeGraduate = residentData.data.filter(
+      (resident: residentType) => {
+        if (!resident.educationalattainment) return false;
+
+        return resident.educationalattainment === "COLLEGE GRADUATE";
+      }
+    ).length;
+
+    const postGraduate = residentData.data.filter((resident: residentType) => {
+      if (!resident.educationalattainment) return false;
+
+      return resident.educationalattainment === "POSTGRADUATE STUDIES";
+    }).length;
+
+    //employment status
+
+    const employed = residentData.data.filter((resident: residentType) => {
+      if (!resident.employmentstatus) return false;
+      return resident.employmentstatus === "employed";
+    }).length;
+
+    const selfEmployed = residentData.data.filter((resident: residentType) => {
+      if (!resident.employmentstatus) return false;
+      return resident.employmentstatus === "selfemployed";
+    }).length;
+
+    const unemployed = residentData.data.filter((resident: residentType) => {
+      if (!resident.employmentstatus) return false;
+      return resident.employmentstatus === "unemployed";
+    }).length;
+
+    const student = residentData.data.filter((resident: residentType) => {
+      if (!resident.employmentstatus) return false;
+      return resident.employmentstatus === "student";
+    }).length;
+
+    const retired = residentData.data.filter((resident: residentType) => {
+      if (!resident.employmentstatus) return false;
+      return resident.employmentstatus === "retired";
+    }).length;
 
     return {
+      //employment status
+      employed,
+      unemployed,
+      selfEmployed,
+      student,
+      retired,
+
+      //educational attainment
+      noEducation,
+      preschool,
+      kindergarten,
+      k12,
+      oldCurriculum,
+      higherEducation,
+      collegeGraduate,
+      postGraduate,
+
       medianAge,
       populationbelow18,
       populationunder18,
@@ -212,31 +316,6 @@ const Count = (): CountResult => {
       populationtotal: residentData.data.length,
       totalOfMale: residentGenderCounts.male,
       totalOfFemale: residentGenderCounts.female,
-      elementary: {
-        grad: headsEducation.elementary.grad + membersEducation.elementary.grad,
-        underGrad:
-          headsEducation.elementary.underGrad +
-          membersEducation.elementary.underGrad,
-      },
-      highSchool: {
-        grad: headsEducation.highSchool.grad + membersEducation.highSchool.grad,
-        underGrad:
-          headsEducation.highSchool.underGrad +
-          membersEducation.highSchool.underGrad,
-      },
-      seniorHighSchool: {
-        grad:
-          headsEducation.seniorHighSchool.grad +
-          membersEducation.seniorHighSchool.grad,
-        underGrad:
-          headsEducation.seniorHighSchool.underGrad +
-          membersEducation.seniorHighSchool.underGrad,
-      },
-      college: {
-        grad: headsEducation.college.grad + membersEducation.college.grad,
-        underGrad:
-          headsEducation.college.underGrad + membersEducation.college.underGrad,
-      },
     };
   }, [cencusData, residentData]);
 };

@@ -20,9 +20,32 @@ const residentSchema = z.object({
   }),
   nationality: z.string().optional(),
   mobilenumber: z.string().optional(),
-  address: z.string().optional(),
   streetname: z.string().optional(),
   province: z.string().optional(),
+
+  citizenship: z.string().min(1, "Citizen is required"),
+  city: z.string().min(1, "City is required"),
+  currentschoolenrollment: z
+    .string()
+    .min(1, "Current School Enrollment is required"),
+  educationalattainment: z
+    .string()
+    .min(1, "Educational Attainment is required"),
+  emailadress: z
+    .string()
+    .email({ message: "Invalid email address" })
+    .nonempty({ message: "Email is required" }),
+  emergencycontactname: z.string().min(1, "Emergency Contact Name is required"),
+  emergencycontactnumber: z
+    .number()
+    .min(1, "Emergency Contact Number is required"),
+  employmentstatus: z.string().min(1, "Employment Status is required"),
+  placeofbirth: z.string().min(1, "Place of Birth is required"),
+  relationshiptoemergencycontact: z
+    .string()
+    .min(1, "Relationship to Emergency Contact is required"),
+  schooltype: z.string().min(1, "School Type is required"),
+
   cloudinaryphoto: z.string().min(1, " required"),
 });
 
@@ -38,7 +61,7 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
   handleCancel,
 }) => {
   const [preview, setPreview] = useState<null | string>(null);
-
+  console.log(residentDetails);
   const {
     handleCreateNewResidentUpdate,
     createUpdateResident,
@@ -67,18 +90,26 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
         dateofbirth: residentDetails.dateofbirth,
         gender: residentDetails.gender,
         civilstatus: residentDetails.civilstatus,
-        nationality: residentDetails.nationality
-          ? residentDetails.nationality
-          : "",
         streetname: residentDetails.streetname
           ? residentDetails.streetname
           : "",
-        address: residentDetails.address ? residentDetails.address : "",
         province: residentDetails.province ? residentDetails.province : "",
         mobilenumber: residentDetails?.mobilenumber?.toString()
           ? residentDetails?.mobilenumber?.toString()
           : "",
         age: residentDetails.age,
+        citizenship: residentDetails.citizenship,
+        city: residentDetails.city,
+        currentschoolenrollment: residentDetails.currentschoolenrollment,
+        emailadress: residentDetails.emailadress,
+        emergencycontactname: residentDetails.emergencycontactname,
+        emergencycontactnumber: Number(residentDetails.emergencycontactnumber),
+        employmentstatus: residentDetails.employmentstatus,
+        placeofbirth: residentDetails.placeofbirth,
+        relationshiptoemergencycontact:
+          residentDetails.relationshiptoemergencycontact,
+        schooltype: residentDetails.schooltype,
+        educationalattainment: residentDetails.educationalattainment,
       });
 
       handleGetReason(residentDetails._id);
@@ -126,12 +157,22 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
       age: data.age,
       gender: data.gender,
       civilstatus: data.civilstatus,
-      nationality: data.nationality,
       mobilenumber: Number(data.mobilenumber) || undefined,
-      address: data.address,
       streetname: data.streetname,
       province: data.province,
       cloudinaryphoto: data.cloudinaryphoto,
+
+      citizenship: data.citizenship,
+      city: data.city,
+      currentschoolenrollment: data.currentschoolenrollment,
+      educationalattainment: data.educationalattainment,
+      emailadress: data.emailadress,
+      emergencycontactname: data.emergencycontactname,
+      emergencycontactnumber: Number(data.emergencycontactnumber),
+      employmentstatus: data.employmentstatus,
+      placeofbirth: data.placeofbirth,
+      relationshiptoemergencycontact: data.relationshiptoemergencycontact,
+      schooltype: data.schooltype,
     };
 
     handleCreateNewResidentUpdate(updateData);
@@ -303,40 +344,6 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
 
               <div>
                 <label
-                  htmlFor="nationality"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Nationality
-                </label>
-                <input
-                  {...register("nationality")}
-                  onChange={(e) => {
-                    e.target.value = e.target.value.toUpperCase();
-                  }}
-                  type="text"
-                  id="nationality"
-                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="address"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Address
-                </label>
-                <input
-                  {...register("address")}
-                  type="text"
-                  id="address"
-                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
-                  onChange={(e) => {
-                    e.target.value = e.target.value.toUpperCase();
-                  }}
-                />
-              </div>
-              <div>
-                <label
                   htmlFor="streetname"
                   className="text-sm font-medium text-gray-700"
                 >
@@ -382,6 +389,270 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
                   id="mobilenumber"
                   className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
                 />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="Citizen Ship"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Citizen Ship
+                </label>
+                <input
+                  {...register("citizenship")}
+                  type="text"
+                  id="Citizen Ship"
+                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="city"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  City
+                </label>
+                <input
+                  {...register("city")}
+                  type="text"
+                  id="city"
+                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Current School Enrollment?
+                </label>
+                <select
+                  {...register("currentschoolenrollment")}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                >
+                  <option value="yes">YES</option>
+                  <option value="no">NO</option>
+                </select>
+                {errors.currentschoolenrollment && (
+                  <p>{errors.currentschoolenrollment.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  HIGHEST GRADE/YEAR COMPLETED
+                </label>
+                <select
+                  {...register("educationalattainment")}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                >
+                  <option value="NO GRADE COMPLETED">NO GRADE COMPLETED</option>
+                  <option value="PRESCHOOL">PRESCHOOL</option>
+                  <option value="KINDERGARTEN">KINDERGARTEN</option>
+
+                  {/* K TO 12 CURRICULUM */}
+                  <optgroup label="K TO 12 CURRICULUM">
+                    <option value="GRADE 1 (K TO 12)">GRADE 1 (K TO 12)</option>
+                    <option value="GRADE 2 (K TO 12)">GRADE 2 (K TO 12)</option>
+                    <option value="GRADE 3 (K TO 12)">GRADE 3 (K TO 12)</option>
+                    <option value="GRADE 4 (K TO 12)">GRADE 4 (K TO 12)</option>
+                    <option value="GRADE 5 (K TO 12)">GRADE 5 (K TO 12)</option>
+                    <option value="GRADE 6 (K TO 12)">GRADE 6 (K TO 12)</option>
+                    <option value="GRADE 7 (K TO 12)">GRADE 7 (K TO 12)</option>
+                    <option value="GRADE 8 (K TO 12)">GRADE 8 (K TO 12)</option>
+                    <option value="GRADE 9 (K TO 12)">GRADE 9 (K TO 12)</option>
+                    <option value="GRADE 10 (K TO 12)">
+                      GRADE 10 (K TO 12)
+                    </option>
+                    <option value="GRADE 11 (K TO 12)">
+                      GRADE 11 (K TO 12)
+                    </option>
+                    <option value="GRADE 12 (K TO 12)">
+                      GRADE 12 (K TO 12)
+                    </option>
+                  </optgroup>
+
+                  {/* OLD CURRICULUM */}
+                  <optgroup label="OLD CURRICULUM">
+                    <option value="GRADE 1 (OLD CURRICULUM)">
+                      GRADE 1 (OLD CURRICULUM)
+                    </option>
+                    <option value="GRADE 2 (OLD CURRICULUM)">
+                      GRADE 2 (OLD CURRICULUM)
+                    </option>
+                    <option value="GRADE 3 (OLD CURRICULUM)">
+                      GRADE 3 (OLD CURRICULUM)
+                    </option>
+                    <option value="GRADE 4 (OLD CURRICULUM)">
+                      GRADE 4 (OLD CURRICULUM)
+                    </option>
+                    <option value="GRADE 5 (OLD CURRICULUM)">
+                      GRADE 5 (OLD CURRICULUM)
+                    </option>
+                    <option value="GRADE 6 (OLD CURRICULUM)">
+                      GRADE 6 (OLD CURRICULUM)
+                    </option>
+                    <option value="GRADE 6 GRADUATE (OLD CURRICULUM)">
+                      GRADE 6 GRADUATE (OLD CURRICULUM)
+                    </option>
+                    <option value="GRADE 7 GRADUATE (OLD CURRICULUM)">
+                      GRADE 7 GRADUATE (OLD CURRICULUM)
+                    </option>
+                    <option value="1ST YEAR HIGH SCHOOL (OLD CURRICULUM)">
+                      1ST YEAR HIGH SCHOOL (OLD CURRICULUM)
+                    </option>
+                    <option value="2ND YEAR HIGH SCHOOL (OLD CURRICULUM)">
+                      2ND YEAR HIGH SCHOOL (OLD CURRICULUM)
+                    </option>
+                    <option value="3RD YEAR HIGH SCHOOL (OLD CURRICULUM)">
+                      3RD YEAR HIGH SCHOOL (OLD CURRICULUM)
+                    </option>
+                    <option value="4TH YEAR HIGH SCHOOL (OLD CURRICULUM)">
+                      4TH YEAR HIGH SCHOOL (OLD CURRICULUM)
+                    </option>
+                    <option value="HIGH SCHOOL GRADUATE (OLD CURRICULUM)">
+                      HIGH SCHOOL GRADUATE (OLD CURRICULUM)
+                    </option>
+                  </optgroup>
+
+                  {/* HIGHER EDUCATION */}
+                  <optgroup label="HIGHER EDUCATION">
+                    <option value="1ST YEAR COLLEGE">1ST YEAR COLLEGE</option>
+                    <option value="2ND YEAR COLLEGE">2ND YEAR COLLEGE</option>
+                    <option value="3RD YEAR COLLEGE">3RD YEAR COLLEGE</option>
+                    <option value="4TH YEAR COLLEGE">4TH YEAR COLLEGE</option>
+                    <option value="COLLEGE GRADUATE">COLLEGE GRADUATE</option>
+                    <option value="POSTGRADUATE STUDIES">
+                      POSTGRADUATE STUDIES
+                    </option>
+                  </optgroup>
+                </select>
+                {errors.educationalattainment && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.educationalattainment.message}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="emailadress"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Email Address
+                </label>
+                <input
+                  {...register("emailadress")}
+                  type="text"
+                  id="emailadress"
+                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="emergencycontactname"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Emergency Contact Name
+                </label>
+                <input
+                  {...register("emergencycontactname")}
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
+                  type="text"
+                  id="emergencycontactname"
+                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="emergencycontactnumber"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Emergency Contact Number
+                </label>
+                <input
+                  {...register("emergencycontactnumber")}
+                  type="number"
+                  id="emergencycontactnumber"
+                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Employment Status
+                </label>
+                <select
+                  {...register("employmentstatus")}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                >
+                  <option value="employed">EMPLOYED</option>
+                  <option value="selfemployed">SELF EMPLOYED</option>
+                  <option value="unemployed">UNEMPLOYED</option>
+                  <option value="student">STUDENT</option>
+                  <option value="retired">RETIRED</option>
+                </select>
+                {errors.employmentstatus && (
+                  <p>{errors.employmentstatus.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="placeofbirth"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Place of Birth
+                </label>
+                <input
+                  {...register("placeofbirth")}
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
+                  type="text"
+                  id="placeofbirth"
+                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="relationshiptoemergencycontact"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Relationship Emergency Contact
+                </label>
+                <input
+                  {...register("relationshiptoemergencycontact")}
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
+                  type="text"
+                  id="relationshiptoemergencycontact"
+                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  School Type
+                </label>
+                <select
+                  {...register("schooltype")}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                >
+                  <option value="PUBLIC">PUBLIC</option>
+                  <option value="PRIVATE">PRIVATE</option>
+                </select>
+                {errors.schooltype && <p>{errors.schooltype.message}</p>}
               </div>
             </div>
 

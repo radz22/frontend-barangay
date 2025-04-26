@@ -15,12 +15,23 @@ export interface Resident {
   gender: "male" | "female" | "other";
   civilstatus: "single" | "married" | "widowed" | "separated";
   descriptor: number[];
-  nationality?: string;
   mobilenumber?: number;
-  address?: string;
   age: number;
   streetname?: string;
   province?: string;
+
+  citizenship: string;
+  city: string;
+  currentschoolenrollment: string;
+  educationalattainment: string;
+  emailadress: string;
+  emergencycontactname: string;
+  emergencycontactnumber: string;
+  employmentstatus: string;
+  placeofbirth: string;
+  relationshiptoemergencycontact: string;
+  schooltype: string;
+
   isUpdated?: boolean;
   createdAt?: string;
   updatedAt?: string;

@@ -74,12 +74,22 @@ export const updateResident = async (data: ResidentNew) => {
         age: data.age,
         gender: data.gender,
         civilstatus: data.civilstatus,
-        nationality: data.nationality,
         mobilenumber: Number(data.mobilenumber),
-        address: data.address,
         streetname: data.streetname,
         province: data.province,
         cloudinaryid: data.cloudinaryid,
+
+        citizenship: data.citizenship,
+        city: data.city,
+        currentschoolenrollment: data.currentschoolenrollment,
+        educationalattainment: data.educationalattainment,
+        emailadress: data.emailadress,
+        emergencycontactname: data.emergencycontactname,
+        emergencycontactnumber: data.emergencycontactnumber,
+        employmentstatus: data.employmentstatus,
+        placeofbirth: data.placeofbirth,
+        relationshiptoemergencycontact: data.relationshiptoemergencycontact,
+        schooltype: data.schooltype,
       }
     );
     return response.data;
@@ -101,12 +111,21 @@ export const updateResidentValidate = async (data: residentUpdate) => {
         age: data.age,
         gender: data.gender,
         civilstatus: data.civilstatus,
-        nationality: data.nationality,
         mobilenumber: Number(data.mobilenumber),
-        address: data.address,
         streetname: data.streetname,
         province: data.province,
         image: data.cloudinaryphoto,
+        citizenship: data.citizenship,
+        city: data.city,
+        currentschoolenrollment: data.currentschoolenrollment,
+        educationalattainment: data.educationalattainment,
+        emailadress: data.emailadress,
+        emergencycontactname: data.emergencycontactname,
+        emergencycontactnumber: data.emergencycontactnumber,
+        employmentstatus: data.employmentstatus,
+        placeofbirth: data.placeofbirth,
+        relationshiptoemergencycontact: data.relationshiptoemergencycontact,
+        schooltype: data.schooltype,
       }
     );
     return response.data;

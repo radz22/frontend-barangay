@@ -101,7 +101,7 @@ const CencusDataTable = () => {
                       <Dialog.Portal>
                         <Dialog.Overlay className="fixed inset-0 bg-black/50" />
                         <Dialog.Content className="fixed top-1/2 left-1/2 bg-white p-6 rounded-lg shadow-lg transform -translate-x-1/2 -translate-y-1/2 w-auto h-auto">
-                          <CencusDataModal userData={selectedUser} />
+                          <CencusDataModal data={selectedUser} />
                           <div className="absolute top-[-20px] right-[-20px]">
                             <Dialog.Close asChild>
                               <div className="w-10 h-10 bg-[#7F265B] rounded-full flex items-center justify-center  cursor-pointer">

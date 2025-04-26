@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import authHook from "../hooks/authHook";
 import VerificationCode from "./verification-code";
 import { useState } from "react";
+import logo from "../assets/barangay-logo.png";
 export const SignInForm = () => {
   const {
     register,
@@ -28,10 +29,10 @@ export const SignInForm = () => {
 
   return (
     <div className="px-3 flex items-center justify-center flex-col">
-      <div className="w-[70%] ">
+      <div className="w-[70%]">
         <div>
-          <div className="w-[100px] h-[100px] rounded-full">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRigtgVaWpL82AnhiwTQpt4SI1vV5GTEc-VzA&s" />
+          <div className="w-[150px] h-[100px] rounded-full flex items-start justify-start">
+            <img src={logo} className="w-full h-full" />
           </div>
           <div className="mt-2">
             <h1 className="text-3xl text-[#525252] font-semibold">
@@ -90,18 +91,6 @@ export const SignInForm = () => {
               </div>
             </div>
 
-            <div className="mt-5 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div>
-                  <input type="checkbox" />
-                </div>
-                <div>
-                  <h1 className="text-[#7F265B]  max-lg:text-sm">
-                    Remember me
-                  </h1>
-                </div>
-              </div>
-            </div>
             <div className="w-full mt-8">
               <button
                 className="text-[#FFFFFF] bg-[#7F265B] text-center w-full py-3 px-3 text-lg font-semibold rounded-lg "
