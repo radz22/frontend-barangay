@@ -3,7 +3,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { FiX, FiExternalLink, FiShare2, FiCopy } from "react-icons/fi";
 import { handleSuccessAlert } from "../sweet-alert";
 const ViewOptionLink = () => {
-  const directLink = `http://localhost:5173/page/resident-portal`;
+  const directLink = `https://barangay-ly7m.onrender.com/page/resident-portal`;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(directLink);

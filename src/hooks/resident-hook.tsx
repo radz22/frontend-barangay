@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { reasonDataType } from "../type/reason-type";
 import { useNavigate } from "react-router-dom";
 import { residentVerify } from "../type/resident-verify-type";
+
 import {
   residentUpdate,
   ResidentNew,
@@ -22,6 +23,8 @@ import {
   decline,
   getReasonbyResident,
   verifyResident,
+  archived,
+  restore,
 } from "../services/resident-service";
 import { residentType } from "../type/user/resident-profilling-zod";
 const ResidentHook = () => {
@@ -125,6 +128,27 @@ const ResidentHook = () => {
       handleErrorAlert(error.response.data.error);
     },
   });
+
+  const restoreMutation = useMutation({
+    mutationFn: restore,
+    onSuccess: () => {
+      handleSuccessAlert("Restore Successfuly");
+      queryClient.invalidateQueries({ queryKey: ["resident"] });
+    },
+    onError: (error: any) => {
+      handleErrorAlert(error.response.data.error);
+    },
+  });
+  const archivedMutation = useMutation({
+    mutationFn: archived,
+    onSuccess: () => {
+      handleSuccessAlert("Delete Successfuly");
+      queryClient.invalidateQueries({ queryKey: ["resident"] });
+    },
+    onError: (error: any) => {
+      handleErrorAlert(error.response.data.error);
+    },
+  });
   const handleCreateResident = (data: residentType) => {
     createResidentMutation.mutate(data);
   };
@@ -162,6 +186,12 @@ const ResidentHook = () => {
   const handleVerifyResident = (data: residentVerify) => {
     verifyResidentMutation.mutate(data);
   };
+  const handleArchived = (id: string | null) => {
+    archivedMutation.mutateAsync(id);
+  };
+  const handleRestore = (id: string | null) => {
+    restoreMutation.mutateAsync(id);
+  };
   return {
     handleCreateResident,
     createResidentMutation,
@@ -180,6 +210,10 @@ const ResidentHook = () => {
     declineMutation,
     handleVerifyResident,
     verifyResidentMutation,
+    handleArchived,
+    handleRestore,
+    archivedMutation,
+    restoreMutation,
   };
 };
 

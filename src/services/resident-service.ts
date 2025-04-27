@@ -189,3 +189,24 @@ export const verifyResident = async (data: residentVerify) => {
     throw error;
   }
 };
+
+export const archived = async (id: string | null) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:3000/api/resident/archived/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const restore = async (id: string | null) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:3000/api/resident/restore/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

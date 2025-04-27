@@ -24,6 +24,8 @@ export const residentSchema = z.object({
   streetname: z.string().min(1, "Street name is required"),
   province: z.string().min(1, "Province is required"),
   descriptor: z.array(z.number()).optional(),
+  archived: z.boolean().default(false).optional(),
+
   staffaccountcreate: z.string().optional(),
   createdAt: z.string().optional(),
 
@@ -118,7 +120,6 @@ export interface residentUpdate {
   placeofbirth: string;
   relationshiptoemergencycontact: string;
   schooltype: string;
-
   cloudinaryphoto: string | undefined;
 }
 export type residentApprovalData = {

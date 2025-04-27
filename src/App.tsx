@@ -81,7 +81,11 @@ const Demographic = lazy(() =>
     default: module.default,
   }))
 );
-
+const Restore = lazy(() =>
+  import("./pages/admin/Restore").then((module) => ({
+    default: module.default,
+  }))
+);
 function App() {
   return (
     <Router>
@@ -112,6 +116,7 @@ function App() {
                 path="/admin/archived/census"
                 element={<AdminArchived />}
               />
+              <Route path="/admin/archived/residents" element={<Restore />} />
               <Route
                 path="/admin/staff/account"
                 element={<CreateStaffAccount />}

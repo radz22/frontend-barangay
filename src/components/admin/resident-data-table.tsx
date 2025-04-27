@@ -10,7 +10,7 @@ const ResidentDataTable = () => {
   const [resident, setResident] = useState<residentType | null>(null);
   const [search, setSearch] = useState<string>("");
   const { data: residentData } = useResidentData();
-  const { handleDelete, deleteResidentDataByIdMutation } = ResidentHook();
+  const { archivedMutation, handleArchived } = ResidentHook();
 
   const sortedResident = [...(residentData?.data || [])].sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -58,7 +58,8 @@ const ResidentDataTable = () => {
               .filter(
                 (person: residentType) =>
                   person.descriptor !== undefined &&
-                  person.descriptor.length > 0
+                  person.descriptor.length > 0 &&
+                  person.archived == false
               )
               .map((person: residentType, index: number) => (
                 <tr
@@ -160,8 +161,8 @@ const ResidentDataTable = () => {
                         <Dialog.Content className="fixed top-1/2 left-1/2 bg-white p-6 rounded-lg shadow-lg transform -translate-x-1/2 -translate-y-1/2 w-auto h-auto">
                           <DeleteLayout
                             id={selectId}
-                            handleDelete={handleDelete}
-                            deleteMutation={deleteResidentDataByIdMutation}
+                            handleDelete={handleArchived}
+                            deleteMutation={archivedMutation}
                           />
                           <div className="absolute top-[-20px] right-[-20px]">
                             <Dialog.Close asChild>
