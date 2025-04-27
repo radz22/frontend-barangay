@@ -354,7 +354,13 @@ const DemographicComponent = () => {
             Top Education Level
           </h3>
           <p className="text-2xl font-bold text-yellow-600">
-            {(counts.collegeGraduate / counts.populationtotal) * 100}%
+            {counts.populationtotal
+              ? (
+                  (counts.collegeGraduate / counts.populationtotal) *
+                  100
+                ).toFixed(2)
+              : 0}
+            %
           </p>
           <p className="text-sm text-yellow-500">College Graduate (%)</p>
         </div>
@@ -364,7 +370,10 @@ const DemographicComponent = () => {
             Employment Status
           </h3>
           <p className="text-2xl font-bold text-pink-600">
-            {(counts.employed / counts.populationtotal) * 100}%
+            {counts.populationtotal
+              ? ((counts.employed / counts.populationtotal) * 100).toFixed(2)
+              : 0}
+            %
           </p>
           <p className="text-sm text-pink-500">Employed (%)</p>
         </div>
