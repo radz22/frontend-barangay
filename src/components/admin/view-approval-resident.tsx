@@ -103,6 +103,8 @@ const ViewApprovalResident: React.FC<ViewProps> = ({ data }) => {
               value: data.relationshiptoemergencycontact,
             },
             { label: "School Type", value: data.schooltype },
+            { label: "Documents", value: data.documents },
+            { label: "Reason for Change", value: data.reason },
           ].map((item, idx) => (
             <div
               key={idx}

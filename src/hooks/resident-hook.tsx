@@ -78,14 +78,18 @@ const ResidentHook = () => {
     },
   });
 
-  const deleteResidentDataByIdMutation = useMutation({
+  const deleteResidentDataByIdMutation = useMutation<
+    void,
+    Error,
+    string | null
+  >({
     mutationFn: deleteById,
     onSuccess: () => {
-      handleSuccessAlert("Deleted Succesfuly ");
+      handleSuccessAlert("Deleted Successfully");
       queryClient.invalidateQueries({ queryKey: ["resident"] });
     },
     onError: (error: any) => {
-      handleErrorAlert(error.response.data.error);
+      handleErrorAlert(error.response?.data?.error || "An error occurred");
     },
   });
   const faceRegisterMutation = useMutation({

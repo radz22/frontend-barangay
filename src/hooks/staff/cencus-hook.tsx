@@ -24,16 +24,17 @@ const CencusHook = () => {
       queryClient.invalidateQueries({ queryKey: ["cencus"] });
     },
   });
-  const deleteCencusDataByIdMutation = useMutation({
+  const deleteCencusDataByIdMutation = useMutation<void, Error, string | null>({
     mutationFn: deleteById,
     onSuccess: () => {
-      handleSuccessAlert("Permanently Deleted Succesfuly ");
+      handleSuccessAlert("Permanently Deleted Successfully");
       queryClient.invalidateQueries({ queryKey: ["cencus"] });
     },
     onError: (error: any) => {
-      handleErrorAlert(error.response.data.error);
+      handleErrorAlert(error?.response?.data?.error || "Something went wrong");
     },
   });
+
   const createCencusMutation = useMutation({
     mutationFn: createCencus,
     onSuccess: () => {
@@ -70,7 +71,8 @@ const CencusHook = () => {
   const handleGetUserCencusDataById = (id: string | undefined) => {
     getCencusDataByIdMutation.mutate(id);
   };
-  const handleDelete = (id: string | null | undefined) => {
+  const handleDelete = (id: string | null) => {
+    if (id === null) return;
     deleteCencusDataByIdMutation.mutate(id);
   };
 

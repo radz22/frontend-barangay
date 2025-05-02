@@ -121,6 +121,10 @@ export interface residentUpdate {
   relationshiptoemergencycontact: string;
   schooltype: string;
   cloudinaryphoto: string | undefined;
+
+  //new
+  documents: string;
+  reason: string;
 }
 export type residentApprovalData = {
   _id: string;
@@ -149,7 +153,8 @@ export type residentApprovalData = {
   placeofbirth: string;
   relationshiptoemergencycontact: string;
   schooltype: string;
-
+  documents: string;
+  reason: string;
   createdAt: string;
   updatedAt: string;
   __v: number;

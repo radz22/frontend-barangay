@@ -126,6 +126,8 @@ export const updateResidentValidate = async (data: residentUpdate) => {
         placeofbirth: data.placeofbirth,
         relationshiptoemergencycontact: data.relationshiptoemergencycontact,
         schooltype: data.schooltype,
+        documents: data.documents,
+        reason: data.reason,
       }
     );
     return response.data;

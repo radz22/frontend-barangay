@@ -47,6 +47,25 @@ const residentSchema = z.object({
   schooltype: z.string().min(1, "School Type is required"),
 
   cloudinaryphoto: z.string().min(1, " required"),
+
+  //new  fields
+  documents: z
+    .string()
+    .refine((val) => val !== "", {
+      message: "Document is required",
+    })
+    .refine(
+      (val) =>
+        [
+          "BIRTH CERTIFICATE",
+          "PASSPORT",
+          "ID",
+          "MARRIAGE CERTIFICATE",
+          "OTHER",
+        ].includes(val),
+      { message: "Invalid document type" }
+    ),
+  reason: z.string().min(1, "Reason is required"),
 });
 
 export type ResidentFormData = z.infer<typeof residentSchema>;
@@ -173,6 +192,9 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
       placeofbirth: data.placeofbirth,
       relationshiptoemergencycontact: data.relationshiptoemergencycontact,
       schooltype: data.schooltype,
+
+      documents: data.documents,
+      reason: data.reason,
     };
 
     handleCreateNewResidentUpdate(updateData);
@@ -653,6 +675,55 @@ const FaceVerifiedDetails: React.FC<FaceVerifiedDetailsProps> = ({
                   <option value="PRIVATE">PRIVATE</option>
                 </select>
                 {errors.schooltype && <p>{errors.schooltype.message}</p>}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Select Document
+                </label>
+                <select
+                  defaultValue=""
+                  {...register("documents")}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                >
+                  <option value="">-- Select Document --</option>
+                  <option value="BIRTH CERTIFICATE">Birth Certificate</option>
+                  <option value="PASSPORT">Passport</option>
+                  <option value="ID">ID</option>
+                  <option value="MARRIAGE CERTIFICATE">
+                    Marriage Certificate
+                  </option>
+                  <option value="OTHER">Other</option>
+                </select>
+                {errors.documents && (
+                  <p className="text-red-500 text-sm">
+                    {errors.documents.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="reason"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Reason for Change
+                </label>
+                <input
+                  {...register("reason")}
+                  onChange={(e) => {
+                    e.target.value = e.target.value.toUpperCase();
+                  }}
+                  type="text"
+                  id="reason"
+                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
+                />
+
+                {errors.reason && (
+                  <p className="text-red-500 text-sm">
+                    {errors.reason.message}
+                  </p>
+                )}
               </div>
             </div>
 
