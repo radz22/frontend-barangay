@@ -130,13 +130,13 @@ const ViewApprovalResident: React.FC<ViewProps> = ({ data }) => {
               <img
                 src={data.cloudinaryphoto}
                 alt="Proof of update"
-                className="w-[300px] h-[300px] object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                className="w-[400px] h-[400px]  cursor-pointer hover:opacity-90 transition-opacity"
               />
             </Dialog.Trigger>
 
             <Dialog.Portal>
               <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
-              <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-6xl h-[90vh] max-h-[800px]  rounded-lg shadow-xl overflow-hidden flex flex-col">
+              <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-auto max-w-6xl h-[90vh] max-h-[800px]  rounded-lg shadow-xl overflow-hidden flex flex-col">
                 {data.cloudinaryphoto && (
                   <TransformWrapper
                     initialScale={1}
@@ -145,7 +145,7 @@ const ViewApprovalResident: React.FC<ViewProps> = ({ data }) => {
                     doubleClick={{ step: 0.5 }}
                   >
                     {({ zoomIn, zoomOut, resetTransform }) => (
-                      <div className="relative flex-1">
+                      <div className="relative flex-1 w-full h-full">
                         <div className="absolute top-4 left-4 z-10 flex gap-2 bg-white/80 backdrop-blur-sm p-2 rounded-md shadow-sm">
                           <button
                             onClick={() => zoomIn()}
