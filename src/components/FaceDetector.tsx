@@ -147,8 +147,10 @@ const FaceDetector: React.FC<Props> = ({ faces }) => {
           }
 
           if (isExpectedUser) {
-            foundMatch = true;
-            verifyAndFetchDetails();
+            setTimeout(() => {
+              foundMatch = true;
+              verifyAndFetchDetails();
+            }, 3000);
           }
         });
 

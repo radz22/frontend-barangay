@@ -123,21 +123,47 @@ const ViewApprovalResident: React.FC<ViewProps> = ({ data }) => {
         <h3 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">
           Proof of Update
         </h3>
-        {data.cloudinaryphoto ? (
-          <div className="flex justify-center">
-            <div className="border rounded-lg overflow-hidden shadow-md">
+        <div className="border rounded-lg overflow-hidden shadow-md flex items-center justify-center">
+          <Dialog.Root>
+            <Dialog.Trigger>
               <img
                 src={data.cloudinaryphoto}
                 alt="Proof of update"
-                className="w-[250px] h-[250px] object-cover"
+                className="w-[300px] h-[300px] object-cover cursor-pointer"
               />
-            </div>
-          </div>
-        ) : (
-          <p className="text-gray-500 italic text-center">
-            No proof image provided.
-          </p>
-        )}
+            </Dialog.Trigger>
+
+            <Dialog.Portal>
+              <Dialog.Overlay className="fixed inset-0 bg-black/50" />
+              <Dialog.Content className="fixed top-1/2 left-1/2  p-6 rounded-lg shadow-lg transform -translate-x-1/2 -translate-y-1/2 w-[70%] h-[700px] overflow-auto">
+                {data.cloudinaryphoto && (
+                  <img
+                    src={data.cloudinaryphoto}
+                    alt="Proof of update"
+                    className="w-full h-full "
+                  />
+                )}
+                <div className="absolute top-[10px] right-[10px]  ">
+                  <Dialog.Close asChild>
+                    <div className="w-10 h-10 bg-[#7F265B] rounded-full flex items-center justify-center  cursor-pointer">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill="#fff"
+                          d="M16.95 8.464a1 1 0 0 0-1.414-1.414L12 10.586L8.464 7.05A1 1 0 1 0 7.05 8.464L10.586 12L7.05 15.536a1 1 0 1 0 1.414 1.414L12 13.414l3.536 3.536a1 1 0 1 0 1.414-1.414L13.414 12z"
+                        ></path>
+                      </svg>
+                    </div>
+                  </Dialog.Close>
+                </div>
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>
+        </div>
       </div>
 
       <div className="flex justify-center gap-10 pt-6">

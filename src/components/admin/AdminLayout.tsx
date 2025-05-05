@@ -27,7 +27,11 @@ export const AdminLayout = () => {
 
         <nav className="flex-1 mt-6 space-y-1">
           <NavItem to="/admin/dashboard" label="Dashboard" icon={<FiHome />} />
-          <NavItem to="/admin/residents" label="Residents" icon={<FiUsers />} />
+          <NavItem
+            to="/admin/residents"
+            label="Residents Profile"
+            icon={<FiUsers />}
+          />
           <NavItem
             to="/admin/demographic"
             label="Demographic"
