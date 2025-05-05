@@ -3,6 +3,7 @@ import { residentApprovalData } from "../../type/user/resident-profilling-zod";
 import ResidentHook from "../../hooks/resident-hook";
 import { ResidentNew } from "../../type/user/resident-profilling-zod";
 import * as Dialog from "@radix-ui/react-dialog";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 interface ViewProps {
   data: residentApprovalData | null;
@@ -129,37 +130,69 @@ const ViewApprovalResident: React.FC<ViewProps> = ({ data }) => {
               <img
                 src={data.cloudinaryphoto}
                 alt="Proof of update"
-                className="w-[300px] h-[300px] object-cover cursor-pointer"
+                className="w-[300px] h-[300px] object-cover cursor-pointer hover:opacity-90 transition-opacity"
               />
             </Dialog.Trigger>
 
             <Dialog.Portal>
-              <Dialog.Overlay className="fixed inset-0 bg-black/50" />
-              <Dialog.Content className="fixed top-1/2 left-1/2  p-6 rounded-lg shadow-lg transform -translate-x-1/2 -translate-y-1/2 w-[70%] h-[700px] overflow-auto">
+              <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+              <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-6xl h-[90vh] max-h-[800px]  rounded-lg shadow-xl overflow-hidden flex flex-col">
                 {data.cloudinaryphoto && (
-                  <img
-                    src={data.cloudinaryphoto}
-                    alt="Proof of update"
-                    className="w-full h-full "
-                  />
+                  <TransformWrapper
+                    initialScale={1}
+                    minScale={0.5}
+                    maxScale={8}
+                    doubleClick={{ step: 0.5 }}
+                  >
+                    {({ zoomIn, zoomOut, resetTransform }) => (
+                      <div className="relative flex-1">
+                        <div className="absolute top-4 left-4 z-10 flex gap-2 bg-white/80 backdrop-blur-sm p-2 rounded-md shadow-sm">
+                          <button
+                            onClick={() => zoomIn()}
+                            className="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded"
+                            aria-label="Zoom in"
+                          >
+                            <PlusIcon />
+                          </button>
+                          <button
+                            onClick={() => zoomOut()}
+                            className="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded"
+                            aria-label="Zoom out"
+                          >
+                            <MinusIcon />
+                          </button>
+                          <button
+                            onClick={() => resetTransform()}
+                            className="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded"
+                            aria-label="Reset zoom"
+                          >
+                            <ResetIcon />
+                          </button>
+                        </div>
+
+                        <Dialog.Close asChild>
+                          <button
+                            className="absolute top-4 right-4 z-10 w-10 h-10 bg-[#7F265B] rounded-full flex items-center justify-center cursor-pointer hover:bg-[#6a1d4b] transition-colors"
+                            aria-label="Close dialog"
+                          >
+                            <CloseIcon />
+                          </button>
+                        </Dialog.Close>
+
+                        <TransformComponent
+                          wrapperClass="w-full h-full"
+                          contentClass="flex items-center justify-center"
+                        >
+                          <img
+                            src={data.cloudinaryphoto}
+                            alt="Zoomable content"
+                            className="max-w-full max-h-full object-contain"
+                          />
+                        </TransformComponent>
+                      </div>
+                    )}
+                  </TransformWrapper>
                 )}
-                <div className="absolute top-[10px] right-[10px]  ">
-                  <Dialog.Close asChild>
-                    <div className="w-10 h-10 bg-[#7F265B] rounded-full flex items-center justify-center  cursor-pointer">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fill="#fff"
-                          d="M16.95 8.464a1 1 0 0 0-1.414-1.414L12 10.586L8.464 7.05A1 1 0 1 0 7.05 8.464L10.586 12L7.05 15.536a1 1 0 1 0 1.414 1.414L12 13.414l3.536 3.536a1 1 0 1 0 1.414-1.414L13.414 12z"
-                        ></path>
-                      </svg>
-                    </div>
-                  </Dialog.Close>
-                </div>
               </Dialog.Content>
             </Dialog.Portal>
           </Dialog.Root>
@@ -233,3 +266,49 @@ const ViewApprovalResident: React.FC<ViewProps> = ({ data }) => {
 };
 
 export default ViewApprovalResident;
+
+const PlusIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+  >
+    <path strokeWidth="2" strokeLinecap="round" d="M12 5v14M5 12h14" />
+  </svg>
+);
+
+const MinusIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+  >
+    <path strokeWidth="2" strokeLinecap="round" d="M5 12h14" />
+  </svg>
+);
+
+const ResetIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+  >
+    <path
+      strokeWidth="2"
+      d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+    />
+    <path strokeWidth="2" d="M3 3v5h5" />
+  </svg>
+);
+
+const CloseIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff">
+    <path d="M16.95 8.464a1 1 0 0 0-1.414-1.414L12 10.586L8.464 7.05A1 1 0 1 0 7.05 8.464L10.586 12L7.05 15.536a1 1 0 1 0 1.414 1.414L12 13.414l3.536 3.536a1 1 0 1 0 1.414-1.414L13.414 12z" />
+  </svg>
+);
