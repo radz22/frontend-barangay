@@ -52,7 +52,7 @@ const ResidentPortalComponent = () => {
         ]);
 
         const { data } = await axios.get(
-          "http://localhost:3000/api/resident/resident"
+          "https://grumpy-trains-pump.loca.lt/api/resident/resident"
         );
         setFaces(data);
         setIsLoading(false);

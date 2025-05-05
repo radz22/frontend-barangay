@@ -8,7 +8,7 @@ import {
 export const createResident = async (data: residentType) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/resident",
+      "https://grumpy-trains-pump.loca.lt/api/resident",
       data
     );
     return response.data;
@@ -18,7 +18,9 @@ export const createResident = async (data: residentType) => {
 };
 export const getAllResidentData = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/api/resident");
+    const response = await axios.get(
+      "https://grumpy-trains-pump.loca.lt/api/resident"
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -27,7 +29,7 @@ export const getAllResidentData = async () => {
 export const getUserResidentDataById = async (id: string | undefined) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/resident/${id}`
+      `https://grumpy-trains-pump.loca.lt/api/resident/${id}`
     );
     return response.data;
   } catch (error) {
@@ -38,7 +40,7 @@ export const getUserResidentDataById = async (id: string | undefined) => {
 export const deleteById = async (id: string | null) => {
   try {
     const response = await axios.delete(
-      `http://localhost:3000/api/resident/${id}`
+      `https://grumpy-trains-pump.loca.lt/api/resident/${id}`
     );
     return response.data;
   } catch (error) {
@@ -54,7 +56,7 @@ export const registerFace = async ({
 }) => {
   try {
     const response = await axios.put(
-      `http://localhost:3000/api/resident/${id}`,
+      `https://grumpy-trains-pump.loca.lt/api/resident/${id}`,
       { descriptor }
     );
     return response.data;
@@ -65,7 +67,7 @@ export const registerFace = async ({
 export const updateResident = async (data: ResidentNew) => {
   try {
     const response = await axios.put(
-      `http://localhost:3000/api/resident/update/resident/${data.id}`,
+      `https://grumpy-trains-pump.loca.lt/api/resident/update/resident/${data.id}`,
       {
         firstName: data.firstName,
         lastName: data.lastName,
@@ -101,7 +103,7 @@ export const updateResident = async (data: ResidentNew) => {
 export const updateResidentValidate = async (data: residentUpdate) => {
   try {
     const response = await axios.post(
-      `http://localhost:3000/api/residentupdate`,
+      `https://grumpy-trains-pump.loca.lt/api/residentupdate`,
       {
         updateid: data.updateid,
         firstName: data.firstName,
@@ -138,7 +140,7 @@ export const updateResidentValidate = async (data: residentUpdate) => {
 export const getAllUpdateApproval = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:3000/api/residentupdate"
+      "https://grumpy-trains-pump.loca.lt/api/residentupdate"
     );
     return response.data;
   } catch (error) {
@@ -156,7 +158,7 @@ export const decline = async ({
 }) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/residentupdate/decline",
+      "https://grumpy-trains-pump.loca.lt/api/residentupdate/decline",
       {
         reason,
         reasonid,
@@ -172,7 +174,7 @@ export const decline = async ({
 export const getReasonbyResident = async (id: string | undefined) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/residentupdate/${id}`
+      `https://grumpy-trains-pump.loca.lt/api/residentupdate/${id}`
     );
     return response.data;
   } catch (error) {
@@ -183,7 +185,7 @@ export const getReasonbyResident = async (id: string | undefined) => {
 export const verifyResident = async (data: residentVerify) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/api/image/verify",
+      "https://grumpy-trains-pump.loca.lt/api/image/verify",
       data
     );
     return response.data;
@@ -195,7 +197,7 @@ export const verifyResident = async (data: residentVerify) => {
 export const archived = async (id: string | null) => {
   try {
     const response = await axios.put(
-      `http://localhost:3000/api/resident/archived/${id}`
+      `https://grumpy-trains-pump.loca.lt/api/resident/archived/${id}`
     );
     return response.data;
   } catch (error) {
@@ -205,7 +207,7 @@ export const archived = async (id: string | null) => {
 export const restore = async (id: string | null) => {
   try {
     const response = await axios.put(
-      `http://localhost:3000/api/resident/restore/${id}`
+      `https://grumpy-trains-pump.loca.lt/api/resident/restore/${id}`
     );
     return response.data;
   } catch (error) {
