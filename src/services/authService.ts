@@ -9,7 +9,7 @@ import {
 export const signupService = async (signup: signinAndsignupType) => {
   try {
     const response = await axios.post(
-      `https://grumpy-trains-pump.loca.lt/api/auth/signup`,
+      `http://localhost:3000/api/auth/signup`,
       signup,
       {
         withCredentials: true,
@@ -24,7 +24,7 @@ export const signupService = async (signup: signinAndsignupType) => {
 export const signinService = async (signin: signintype) => {
   try {
     const response = await axios.post(
-      `https://grumpy-trains-pump.loca.lt/api/auth/signin`,
+      `http://localhost:3000/api/auth/signin`,
       signin,
       {
         withCredentials: true,
@@ -38,7 +38,7 @@ export const signinService = async (signin: signintype) => {
 
 export const logoutService = async () => {
   const response = await axios.post(
-    "https://grumpy-trains-pump.loca.lt/api/auth/logout",
+    "http://localhost:3000/api/auth/logout",
     {},
     {
       withCredentials: true,
@@ -49,7 +49,7 @@ export const logoutService = async () => {
 export const forgotPasswordService = async (email: forgotpasswordtype) => {
   try {
     const response = await axios.post(
-      "https://grumpy-trains-pump.loca.lt/api/auth/forgot-password",
+      "http://localhost:3000/api/auth/forgot-password",
       email
     );
     return response.data;
@@ -61,7 +61,7 @@ export const forgotPasswordService = async (email: forgotpasswordtype) => {
 export const resetPasswordService = async (data: resetpasswordtype) => {
   try {
     const response = await axios.put(
-      `https://grumpy-trains-pump.loca.lt/api/auth/${data.id}`,
+      `http://localhost:3000/api/auth/${data.id}`,
       {
         newpassword: data.newpassword,
       }
@@ -73,9 +73,7 @@ export const resetPasswordService = async (data: resetpasswordtype) => {
 };
 export const getStaffAccountData = async () => {
   try {
-    const response = await axios.get(
-      "https://grumpy-trains-pump.loca.lt/api/auth"
-    );
+    const response = await axios.get("http://localhost:3000/api/auth");
     return response.data;
   } catch (error) {
     throw error;
@@ -83,9 +81,7 @@ export const getStaffAccountData = async () => {
 };
 export const deleteAccount = async (id: string | null) => {
   try {
-    const response = await axios.delete(
-      `https://grumpy-trains-pump.loca.lt/api/auth/${id}`
-    );
+    const response = await axios.delete(`http://localhost:3000/api/auth/${id}`);
     return response.data;
   } catch (error) {
     throw error;
@@ -94,7 +90,7 @@ export const deleteAccount = async (id: string | null) => {
 export const getAdminAccountData = async () => {
   try {
     const response = await axios.get(
-      "https://grumpy-trains-pump.loca.lt/api/auth/data/admin"
+      "http://localhost:3000/api/auth/data/admin"
     );
     return response.data;
   } catch (error) {

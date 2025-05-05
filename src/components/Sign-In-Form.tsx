@@ -8,11 +8,7 @@ import authHook from "../hooks/authHook";
 import VerificationCode from "./verification-code";
 import { useState } from "react";
 import logo from "../assets/barangay-logo.png";
-import { useResidentData } from "../hooks/use-resident-data";
 export const SignInForm = () => {
-  const { data } = useResidentData();
-
-  console.log(data);
   const {
     register,
     handleSubmit,

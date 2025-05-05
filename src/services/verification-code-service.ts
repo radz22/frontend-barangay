@@ -11,7 +11,7 @@ export const verifyCode = async ({
 }) => {
   try {
     const response = await axios.post(
-      "https://grumpy-trains-pump.loca.lt/api/verification/verify-code",
+      "http://localhost:3000/api/verification/verify-code",
       { email, code, password },
       {
         withCredentials: true,

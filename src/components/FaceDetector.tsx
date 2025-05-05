@@ -192,7 +192,7 @@ const FaceDetector: React.FC<Props> = ({ faces }) => {
       setFaceMatch(true);
 
       const response = await axios.get(
-        `https://grumpy-trains-pump.loca.lt/api/image/${firstName}/${lastName}`
+        `http://localhost:3000/api/image/${firstName}/${lastName}`
       );
 
       setResidentDetails(response.data);
