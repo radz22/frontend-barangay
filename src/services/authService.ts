@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios from "axios";
 import { signinAndsignupType } from "../type/user/signin-zod";
 import {
   signintype,
