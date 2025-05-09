@@ -5,6 +5,7 @@ import { residentType } from "../../type/user/resident-profilling-zod";
 import DeleteLayout from "./delete-layout";
 import ViewResidentData from "./view-resident-data";
 import { useResidentData } from "../../hooks/use-resident-data";
+import { exportResidentPDF } from "../resident-pdf";
 const ResidentDataTable = () => {
   const [selectId, setSelectId] = useState<string | null>(null);
   const [resident, setResident] = useState<residentType | null>(null);
@@ -30,8 +31,18 @@ const ResidentDataTable = () => {
       fullName.includes(searchTerm)
     );
   });
+
   return (
     <div className="container mx-auto p-4">
+      <div className="w-full flex items-end justify-end px-4 flex-col">
+        <button
+          className="w-auto py-3 px-3 bg-[#7F265B] text-white rounded-lg  font-semibold mb-5"
+          onClick={() => exportResidentPDF(sortedResident)}
+        >
+          Export PDF
+        </button>
+      </div>
+
       <div className="mb-4 flex  justify-end items-end ">
         <input
           type="text"

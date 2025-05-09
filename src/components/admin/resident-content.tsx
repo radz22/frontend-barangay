@@ -45,7 +45,7 @@ const ResidentContent = () => {
           </Dialog.Portal>
         </Dialog.Root>
       </div>
-      <div className="mt-10 w-full z-0 ">
+      <div className=" w-full z-0 ">
         <ResidentDataTable />
       </div>
     </div>

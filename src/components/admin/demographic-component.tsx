@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Count from "../../utils/count-data";
+import { exportPDF } from "../demographic-pdf";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -27,7 +29,19 @@ ChartJS.register(
 const DemographicComponent = () => {
   const counts = Count();
   const currentYear = new Date().getFullYear();
-
+  const data = {
+    totalPopulation: counts.populationtotal,
+    female: counts.totalOfFemale,
+    male: counts.totalOfMale,
+    legalAge: counts.populationunder18,
+    minorAge: counts.populationbelow18,
+    topEducationLevel: counts.collegeGraduate,
+    employmentStatus: counts.employed,
+    unemployed: counts.unemployed,
+    selftemployed: counts.selfEmployed,
+    student: counts.student,
+    retired: counts.retired,
+  };
   const [activeTab, setActiveTab] = useState<
     "age" | "population" | "gender" | "education" | "employment"
   >("age");
@@ -267,9 +281,17 @@ const DemographicComponent = () => {
   };
   return (
     <div className="max-w-6xl mx-auto p-6 ">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">
-        Demographic Analytics
-      </h1>
+      <div className="w-full flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">
+          Demographic Analytics
+        </h1>
+        <button
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200"
+          onClick={() => exportPDF(data)}
+        >
+          Export PDF
+        </button>
+      </div>
 
       <div className="flex border-b border-gray-200 mb-6">
         <button
