@@ -32,8 +32,9 @@ type CountResult = {
   populationThisYear: number;
   populationunder18: number;
   populationbelow18: number;
-  medianAge: number;
+  populationunder60: number;
 
+  medianAge: number;
   employed: number;
   unemployed: number;
   selfEmployed: number;
@@ -78,6 +79,7 @@ const Count = (): CountResult => {
       populationThisYear: 0,
       populationunder18: 0,
       populationbelow18: 0,
+      populationunder60: 0,
       medianAge: 0,
     };
 
@@ -154,7 +156,13 @@ const Count = (): CountResult => {
     const populationunder18 = residentData.data.filter(
       (resident: residentType) => {
         if (!resident.age) return false;
-        return resident.age >= 18;
+        return resident.age >= 18 && resident.age < 60;
+      }
+    ).length;
+    const populationunder60 = residentData.data.filter(
+      (resident: residentType) => {
+        if (!resident.age) return false;
+        return resident.age >= 60;
       }
     ).length;
     const populationbelow18 = residentData.data.filter(
@@ -306,6 +314,7 @@ const Count = (): CountResult => {
       medianAge,
       populationbelow18,
       populationunder18,
+      populationunder60,
       populationThisYear,
       populationGet2025,
       populationGet2026,

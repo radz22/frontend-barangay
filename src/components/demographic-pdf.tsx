@@ -15,6 +15,7 @@ type DemographicData = {
   male: number;
   legalAge: number;
   minorAge: number;
+  seniorAge: number;
   topEducationLevel: number;
   employmentStatus: number;
   unemployed: number;
@@ -85,12 +86,16 @@ const DemographicPDF: React.FC<{ data: DemographicData }> = ({ data }) => (
           <Text style={styles.value}>{data.male}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>Legal Age</Text>
+          <Text style={styles.label}>Minor</Text>
+          <Text style={styles.value}>{data.minorAge}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Adult</Text>
           <Text style={styles.value}>{data.legalAge}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>Minor Age</Text>
-          <Text style={styles.value}>{data.minorAge}</Text>
+          <Text style={styles.label}>Senior</Text>
+          <Text style={styles.value}>{data.seniorAge}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>Top Education Level</Text>

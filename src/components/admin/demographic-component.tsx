@@ -35,6 +35,7 @@ const DemographicComponent = () => {
     male: counts.totalOfMale,
     legalAge: counts.populationunder18,
     minorAge: counts.populationbelow18,
+    seniorAge: counts.populationunder60,
     topEducationLevel: counts.collegeGraduate,
     employmentStatus: counts.employed,
     unemployed: counts.unemployed,
@@ -52,13 +53,25 @@ const DemographicComponent = () => {
 
   const ratioString = `${malePercentage}:${femalePercentage}`;
   const ageData = {
-    labels: ["Below 18", "18 and Above"],
+    labels: ["Minor", "Adult", "Senior"],
     datasets: [
       {
         label: "Age Distribution",
-        data: [counts.populationbelow18, counts.populationunder18],
-        backgroundColor: ["rgba(54, 162, 235, 0.7)", "rgba(255, 99, 132, 0.7)"],
-        borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 99, 132, 1)"],
+        data: [
+          counts.populationbelow18,
+          counts.populationunder18,
+          counts.populationunder60,
+        ],
+        backgroundColor: [
+          "rgba(54, 162, 235, 0.7)",
+          "rgba(255, 99, 132, 0.7)",
+          "rgba(255, 206, 86, 0.7)",
+        ],
+        borderColor: [
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 99, 132, 1)",
+          "rgba(255, 206, 86, 1)",
+        ],
         borderWidth: 1,
       },
     ],
